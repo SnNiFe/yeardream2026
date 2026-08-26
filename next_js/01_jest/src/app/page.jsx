@@ -1,5 +1,60 @@
+/*
+    1. JEST 설치 npm install -D jest jest-environment-jsdom
+    2. jest.config.js 설정
+    3. padkage.json 에 test script 추가
+    4. 모듈작성(테스터블 하게)
+    5. 테스트코드 작성
+    6. npm run test
+*/
+'use client'
+
+import {useState} from "react";
+
 export default function App(){
+
+    const [result,setResult] = useState({su1:0, su2:0, oper:'+', result:0});
+
+    const setVal = function (e){
+        setResult({
+            ...result,
+            [e.target.name]: e.target.value
+        });
+    }
+
+    const calculate = function (){
+        const {su1, su2, oper} = result;
+
+        let num1 = parseInt(su1);
+        let num2 = parseInt(su2);
+
+        if(oper === '+'){
+            setResult({...result, result: num1 + num2});
+        }
+        if(oper === '-'){
+            setResult({...result, result: num1 - num2});
+        }
+        if(oper === '*'){
+            setResult({...result, result: num1 * num2});
+        }
+        if(oper === '/'){
+            if(num2 !== 0){setResult({...result, result: num1 / num2});}
+            else{setResult({...result, result: 'ERROR(0으로 나눌 수 없음)'});}
+        }
+
+    }
+
     return (
-        <div>Hello Test</div>
+        <div>
+            <input type={"number"} name={"su1"} value={result.su1} onChange={setVal}/>
+            <select name={"oper"} onChange={setVal}>
+                <option value={"+"}>+</option>
+                <option value={"-"}>-</option>
+                <option value={"*"}>*</option>
+                <option value={"/"}>/</option>
+            </select>
+            <input type={"number"} name={"su2"} value={result.su2} onChange={setVal}/>
+            <p><button onClick={calculate}>계산</button></p>
+            <h3>답 : {result.result}</h3>
+        </div>
     );
 }
