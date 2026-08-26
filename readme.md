@@ -26,3 +26,5 @@ git remote add origin https://github.com/SnNiFe/yeardream2026.git
 # 기본 브랜치 이름 변경
 git branch -M main
 
+# push
+git push -u origin main
