@@ -5,7 +5,7 @@ const nextJest = require("next/jest");
 const createJestConfig = nextJest({dir:'./'});
 
 const jestConfig = {
-    testEnvironment:'jes-environment-jsdom',
+    testEnvironment:'jest-environment-jsdom',
     moduleNameMapper: {
         '^@/(.*)$':'<rootDir>/src/$1'
     }
