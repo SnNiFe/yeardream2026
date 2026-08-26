@@ -62,7 +62,7 @@ export default function App(){
             </select>
             <input type={"number"} name={"su2"} value={result.su2} onChange={setVal}/>
             <p><button onClick={calculate}>계산</button></p>
-            <h3>답 : {result.result}</h3>
+            <h3 data-testid="result">답 : {result.result}</h3>
         </div>
     );
 }
