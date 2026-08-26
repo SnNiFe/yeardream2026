@@ -9,6 +9,7 @@
 'use client'
 
 import {useState} from "react";
+import {divide, minus, multiply, plus} from "@/app/calcModule";
 
 export default function App(){
 
@@ -28,17 +29,21 @@ export default function App(){
         let num2 = parseInt(su2);
 
         if(oper === '+'){
-            setResult({...result, result: num1 + num2});
+            //setResult({...result, result: num1 + num2});
+            setResult({...result, result:plus(num1,num2)});
         }
         if(oper === '-'){
-            setResult({...result, result: num1 - num2});
+            //setResult({...result, result: num1 - num2});
+            setResult({...result, result:minus(num1,num2)});
         }
         if(oper === '*'){
-            setResult({...result, result: num1 * num2});
+            //setResult({...result, result: num1 * num2});
+            setResult({...result, result:multiply(num1,num2)});
         }
         if(oper === '/'){
-            if(num2 !== 0){setResult({...result, result: num1 / num2});}
-            else{setResult({...result, result: 'ERROR(0으로 나눌 수 없음)'});}
+            //if(num2 !== 0){setResult({...result, result: num1 / num2});}
+            //else{setResult({...result, result: 'ERROR(0으로 나눌 수 없음)'});}
+            setResult({...result, result:divide(num1,num2)});
         }
 
     }
