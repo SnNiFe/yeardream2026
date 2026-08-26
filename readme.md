@@ -15,5 +15,7 @@ git status
 # commit 하기
 git commit -m "첫번째 커밋"
 
-#commit 의 상태 확인
+# commit 의 상태 확인
 git log --graph --oneline --all
+
+# 이후 vs code 로 활용 가능
