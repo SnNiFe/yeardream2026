@@ -19,3 +19,10 @@ git commit -m "첫번째 커밋"
 git log --graph --oneline --all
 
 # 이후 vs code 로 활용 가능
+
+# 원격저장소 등록
+git remote add origin https://github.com/SnNiFe/yeardream2026.git
+
+# 기본 브랜치 이름 변경
+git branch -M main
+
