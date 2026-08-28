@@ -59,4 +59,4 @@ Content-Type: application/json
 }
 
 ### 5. 회원 삭제
-DELETE http://localhost/member/delete/amongus
+DELETE http://localhost/member/delete/naak

@@ -55,8 +55,13 @@ router.put('/update/:id',function(req,res){
 });
 
 // 회원 삭제 (/member/delete/:id)
-router.delete('/delete/:id',function(req,res){
-    res.json({'success':true,'data':'회원삭제 완료'});
+router.delete('/delete/:id',async(req,res)=>{
+    const {id} = req.params;
+    let member = await Member.findOneAndDelete({id}).lean();
+    if(member == null){
+        res.json({'success':false,'msg':'회원 없음'});
+    }
+    res.json({'success':true,'msg':'회원삭제 완료','data':member});
 });
 
 module.exports = router;
