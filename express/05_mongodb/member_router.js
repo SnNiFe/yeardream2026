@@ -1,10 +1,18 @@
 const express = require('express');
 const router = express.Router();
+const Member = require('./model');
 
 // 회원 가입 (/member/join)
-router.post('/join',function(req,res){
-    const param = req.body;
-    res.json({'success':true,'data':param});
+router.post('/join',async(req,res)=>{
+
+    const {id,pw,name,phone}= req.body;
+    try{
+        await Member.create({id,pw,name,phone});
+    }catch(e){
+        console.error(e.code,e);
+        res.json({'success':false,message:e.code});
+    }
+    res.json({'success':true,'data': {}});
 });
 
 // 회원 리스트 (/member/list, /member/)

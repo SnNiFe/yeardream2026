@@ -6,7 +6,8 @@ Content-Type: application/json
   "id": "user",
   "pw": "user@pass",
   "name": "일반유저",
-  "phone": "010-1234-5678"
+  "phone": "010-1234-5678",
+  "grade": "admin"
 }
 
 ### 2. 회원 목록

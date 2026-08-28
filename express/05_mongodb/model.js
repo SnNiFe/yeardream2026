@@ -12,7 +12,7 @@ let schema = new mongoose.Schema({
     },
     pw:{
         type:String,
-        required[ture,'비밀번호는 필수 입니다.'],
+        required:[true,'비밀번호는 필수 입니다.'],
         trim:true,
         select:false // 조회할때 기본적으로 빼고 가져온다.
     },
