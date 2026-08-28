@@ -1,5 +1,13 @@
 ### 1. 회원 등록
 POST http://localhost/member/join
+Content-Type: application/json
+
+{
+  "id": "user",
+  "pw": "user@pass",
+  "name": "일반유저",
+  "phone": "010-1234-5678"
+}
 
 ### 2. 회원 목록
 GET http://localhost/member/list
@@ -9,6 +17,12 @@ GET http://localhost/member/get/admin
 
 ### 4. 회원 수정
 PUT http://localhost/member/update/adming
+Content-Type: application/json
+
+{
+  "name": "수정된 이름",
+  "phone": "010-0987-6543"
+}
 
 ### 5. 회원 삭제
 DELETE http://localhost/member/delete/amongus
