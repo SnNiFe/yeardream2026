@@ -9,8 +9,19 @@ router.post('/join',async(req,res)=>{
     try{
         await Member.create({id,pw,name,phone});
     }catch(e){
-        console.error(e.code,e);
-        res.json({'success':false,message:e.code});
+        console.error(e,'CODE :'+e.code);
+
+        let msg = "";
+
+        switch (e.code){
+            case 11000:
+                msg = "이미 사용중인 아이디 입니다.";
+                break;
+            default:
+                msg = "필수값을 확인해 주세요";
+        }
+
+        res.json({'success':false,message:msg});
     }
     res.json({'success':true,'data': {}});
 });
