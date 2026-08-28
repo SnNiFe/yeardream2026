@@ -1,0 +1,14 @@
+### 1. 회원 등록
+POST http://localhost/member/join
+
+### 2. 회원 목록
+GET http://localhost/member/list
+
+### 3. 회원 상세보기
+GET http://localhost/member/get/admin
+
+### 4. 회원 수정
+PUT http://localhost/member/update/adming
+
+### 5. 회원 삭제
+DELETE http://localhost/member/delete/amongus
