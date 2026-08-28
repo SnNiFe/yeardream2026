@@ -50,12 +50,13 @@ GET http://localhost/member/list
 GET http://localhost/member/get/admin
 
 ### 4. 회원 수정
-PUT http://localhost/member/update/adming
+PUT http://localhost/member/update/admin
 Content-Type: application/json
 
 {
   "name": "수정된 이름",
-  "phone": "010-0987-6543"
+  "phone": "010-0987-6543",
+  "grade": "admin"
 }
 
 ### 5. 회원 삭제

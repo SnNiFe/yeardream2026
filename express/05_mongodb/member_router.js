@@ -48,20 +48,38 @@ router.get('/get/:id',async(req,res)=>{
 });
 
 // 회원 정보 수정 (/member/update/:id)
-router.put('/update/:id',function(req,res){
+router.put('/update/:id',async(req,res)=>{
     const {id} = req.params;
-    const param = req.body;
-    res.json({'success':true,'data':{'id':id,'msg':param}});
+    const {pw,name,phone,grade} = req.body;
+    let update = {}; // const 는 배열이나 오브젝트 일부 수정은 허용
+
+    if(pw != undefined) update['pw'] = pw;
+    if(name != undefined) update['name'] = name;
+    if(phone != undefined) update['phone'] = phone;
+    if(grade != undefined) update['grade'] = grade;
+
+    const member = await Member.findOneAndUpdate({id},update,
+        {
+            new:true, // 수정된 후의 문서를 보여준다.
+            runValidators:true // update 후 스키마 검증 진행
+        }).lean();
+
+    if(member == null){
+        res.json({'success':false,'msg':'없는 회원'});
+    }
+    res.json({'success':true,'msg':'수정에 성공 했습니다.',data:member});
+
+    //res.json({'success':true,'data':{'id':id,'msg':param}});
 });
 
 // 회원 삭제 (/member/delete/:id)
 router.delete('/delete/:id',async(req,res)=>{
-    const {id} = req.params;
+    const id = req.params.id;
     let member = await Member.findOneAndDelete({id}).lean();
     if(member == null){
         res.json({'success':false,'msg':'회원 없음'});
     }
-    res.json({'success':true,'msg':'회원삭제 완료','data':member});
+    res.json({'success':true,'msg':'회원삭제 완료',data:member});
 });
 
 module.exports = router;
