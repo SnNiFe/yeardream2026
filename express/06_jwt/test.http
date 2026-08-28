@@ -7,4 +7,4 @@ Content-Type: application/json
 ### 2. 로그인 인증(토큰 인증)
 POST http://localhost/check
 Content-Type: application/json
-Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImFkbWluIiwicHciOiJwYXNzIiwiaWF0IjoxNzg3ODk5MzQ2LCJleHAiOjE3ODc5MDExNDZ9.Jgx1AH0nYwgPhAtZctK8Nrz8SxKjH6pxIe3TcOEnl94
+Authorization:
