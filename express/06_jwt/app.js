@@ -22,7 +22,24 @@ app.post('/login',(req,res)=>{
     res.json({'success':true,'token':token});
 });
 
+app.post('/check',(req,res)=>{
+    const headers = req.headers;
+    console.log('headers',headers);
+    const token = headers.authorization;
+    if(token == null){
+        res.json({'loginYN':false,'msg':'토큰이 없습니다.'});
+    }
 
+    try{
+        const info = jwt.verify(token,KEY);
+        console.log('info',info);
+        // 요청했던 일을 한다.
+        res.json({'loginYN':true,'data':'추가작업 결과'});
+    } catch(e){
+        // 만료된 토큰이라면 에러가 발생한다.
+        res.json({'loginYN':false,'msg':'유효하지 않은 토큰 입니다.'});
+    }
+});
 
 
 
