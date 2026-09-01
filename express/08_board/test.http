@@ -1,0 +1,46 @@
+### 1. 회원 등록
+POST http://localhost/member/join
+Content-Type: application/json
+
+{
+  "id": "user",
+  "pw": "user@pass",
+  "name": "일반유저",
+  "phone": "010-1234-1234"
+}
+
+### 2. 로그인
+POST http://localhost/member/login
+Content-Type: application/json
+
+{
+  "id": "user",
+  "pw": "user@pass"
+}
+
+
+### 3. 글쓰기
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6InVzZXIiLCJwdyI6InVzZXJAcGFzcyIsImlhdCI6MTc4ODIyNDc5NSwiZXhwIjoxNzg4MjI4Mzk1fQ.DLMxM1RolUN6sZXMj0v9_TaGBfv5u3TQM4mg4EdcGgk
+POST http://localhost/board/write
+Content-Type: application/json
+Authorization: {{token}}
+
+{"user_name":"user", "subject":"테스트 글쓰기", "content" : "아무거나 써 봤어요"}
+
+### 4. 리스트
+GET http://localhost/board/list/1
+Content-Type: application/json
+Authorization: {{token}}
+
+
+
+### 5. 상세보기
+GET http://localhost/board/detail/1
+Content-Type: application/json
+Authorization: {{token}}
+
+
+### 6. 삭제
+GET http://localhost/board/delete/2
+Content-Type: application/json
+Authorization: {{token}}

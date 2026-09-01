@@ -1,0 +1,14 @@
+### 테스트용 http 파일
+### 1. 리스트보기
+
+### 2. 상세보기
+
+### 3. 글쓰기
+
+### 4. 삭제하기
+
+### 5. 회원가입, 로그인 이후 모든 기능 jwt 인증
+POST http://localhost/login
+Content-Type: application/json
+
+{"id": "admin","pw": "admin@pass"}
