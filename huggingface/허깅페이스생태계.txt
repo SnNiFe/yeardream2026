@@ -1,0 +1,39 @@
+Huggingface Library
+Transformers : 자연어 처리 모델
+Datasets : 대규모 데이터셋 로드 및 처리(스트리밍으로 효율적 처리 가능)
+Tokenizer : 자르기(인식하기 좋게)
+Accelerate : 하드웨어에 따른 최적화된 실행 처리
+Diffusers : 이미지생성
+Evaluate : 모델성능 측정 지표로 평가
+PEFT : 경량 학습 방법 / 효율적인 파인튜닝 제공
+
+
+tokenizer_config.json
+{
+  "backend": "tokenizers",	// 토크나이저를 실행하는 백엔드 라이브러리(Rust 기반 고성능 `tokenizers` 라이브러리)
+  "bos_token": "[BOS]",		// 문장/시퀀스의 시작(Beginning of Sequence)을 나타내는 특수 토큰
+  "clean_up_tokenization_spaces": false, // 토큰화 결과 공백 정리, `false`는 원본 공백 구조를 그대로 유지
+  "eos_token": "<|endofturn|>",	// 문장끝(End of Sequence)을 나타내는 특수 토큰(모델이 응답을 마쳤음을 알릴 때 사용)
+  "errors": "replace",	// 디코딩/인코딩 과정에서 정해지지 않은 문자나 오류가 발생했을 때 처리할 방식
+  "is_local": true,		// 토크나이저 구성 파일이 로컬 환경에서 로드되었는지 여부
+  "local_files_only": false,	// 모델 호출시 오직 로컬 파일만 사용할지 여부
+  "model_input_names": [
+    "input_ids",		// 텍스트가 정수 ID로 변환된 값 목록
+    "attention_mask"	// 패딩(Padding) 영역과 실제 토큰 영역을 구분해 주는 마스크 값
+  ],
+  "model_max_length": 1000000000000000019884624838656,	// 토크나이저가 입력으로 받아들일 수 있는 최대 토큰 길이
+  "pad_token": "[PAD]",	// 문장의 길이를 맞추기 위해 사용되는 패딩(Padding) 특수 토큰입니다.
+  "padding_side": "right",	// 패딩 토큰을 문장의 어느 쪽에 붙일지
+  "split_special_tokens": false, // 특수 토큰을 독립된 토큰으로 보존할지 여부(false는 통째로 처리)
+  "tokenizer_class": "TokenizersBackend",	// 토크나이저를 인스턴스화할 때 사용하는 클래스 이름을 지정
+  "unk_token": "[UNK]"	// 어휘집에 등록되지 않은 단어나 문자가 들어왔을 때 대체 처리 : UNknown Token
+}
+
+# 허깅 페이스 토큰 발급 및 로그인
+1. 회원가입 -> 로그인
+2. 우측 상단 프로필 클릭 -> settings -> Access Tokens
+-> Create new Token 클릭
+Type 을 Read 로 설정 -> 토큰 생성 -> 복사해 둔다.
+* Read : 읽기 권한
+Fine-grained : 세부권한 제어
+Write : 읽기 + 쓰기
