@@ -18,7 +18,11 @@ process.env.SECRET = crypto.randomBytes(64).toString('hex');
 
 app.use(logger('dev'));
 app.use(express.json());
-app.use(cors());
+app.use(cors({
+    origin: 'http://localhost:3000',
+    credentials: true, // 프론트엔드에서 인증 정보(헤더)를 보내는 것을 허용
+    allowedHeaders: ['Content-Type', 'Authorization'] // Authorization 헤더 통과 허용
+}));
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));

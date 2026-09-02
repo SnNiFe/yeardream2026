@@ -19,6 +19,12 @@ router.post('/write', async(req, res) => {
     const board = await Board.create({user_name, subject, content});
     const result = board.toObject();
     console.log('result',result);
+
+    // 핵심 : app.js에서 보관함에 넣어둔 'io'를 꺼내옵니다.
+    const io = req.app.get('io');
+    // 꺼내온 io를 통해 접속한 모두에게 방송을 쏩니다!
+    io.emit('new_post_alert');
+
     return res.json({success:true,idx:result.idx});
 });
 

@@ -8,6 +8,8 @@ const app = require('../app');
 const debug = require('debug')('08-board:server');
 const http = require('http');
 
+const { Server } = require('socket.io'); // 👈 1. 추가
+
 /**
  * Get port from environment and store in Express.
  */
@@ -20,6 +22,21 @@ app.set('port', port);
  */
 
 const server = http.createServer(app);
+
+// ✨ 2. 서버가 만들어진 직후에 소켓 기지국 세팅!
+const io = new Server(server, {
+  cors: {
+    origin: "http://localhost:3000",
+    methods: ["GET", "POST"]
+  }
+});
+
+// ✨ 3. 라우터(board.js)에서 쓸 수 있도록 app 보관함에 쏙 넣어줍니다.
+app.set('io', io);
+
+io.on('connection', (socket) => {
+  console.log('실시간 통신 접속 완료!', socket.id);
+});
 
 /**
  * Listen on provided port, on all network interfaces.

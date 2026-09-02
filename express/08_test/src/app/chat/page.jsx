@@ -3,6 +3,7 @@
 import {useEffect, useState} from "react";
 import axios from "axios";
 import Link from "next/link";
+import { io } from "socket.io-client";
 
 export default function ChatPage ({params}){
 
@@ -10,6 +11,24 @@ export default function ChatPage ({params}){
         params.then(({slug})=>{
             callList(slug);
         });
+
+        // ✨ 1. 백엔드 기지국(서버) 주소로 전화선 연결
+        // (주의: 주소는 백엔드 서버 주소와 포트를 적어야 합니다. 보통 3000이나 8080입니다)
+        const socket = io("http://localhost:80");
+
+        // ✨ 2. 백엔드에서 'new_post_alert' 방송을 쏘면 이 안의 코드가 자동으로 실행됩니다!
+        socket.on('new_post_alert', () => {
+            console.log("새 채팅 도착! 화면을 새로고침합니다.");
+
+            // 새로고침 버튼을 안 눌러도 방금 쓴 글까지 알아서 다시 불러옴!
+            callList(1);
+        });
+
+        // 컴포넌트가 꺼질 때 전화선 뽑기
+        return () => {
+            socket.disconnect();
+        };
+
     }, []);
 
     let [info, setInfo] = useState('');
