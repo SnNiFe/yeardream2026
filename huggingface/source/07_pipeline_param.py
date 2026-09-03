@@ -1,6 +1,6 @@
 from transformers import pipeline
 # device = [0:GPU, -1:CPU(default), "cuda":사용가능한GPU]
-summ = pipeline(task="summarization", model="EbanLee/kobart-summary-v3", device=0)
+summ = pipeline(task="summarization", model="EbanLee/kobart-summary-v3", device=-1)
 
 text = """자연어(NLP) 처리는 컴퓨터가 인간의 언어를 이해하고 생성할 수 있도록 하는 기술 입니다.
 딥러닝의 발전과 함께 다양한 모델이 제안되었으며, 실제 서비스에도 널리 활용되고 있습니다."""
