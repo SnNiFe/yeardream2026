@@ -15,7 +15,7 @@ model = AutoModelForCausalLM.from_pretrained(
 )
 
 prompt = input('AI 에게 질문하고 싶은 내용은?\n')
-print(prompt)
+# print(prompt)
 # 3. 토큰화
 message = [
     {"role":"system", "content":"너는 IT 전문가야, AI 지식을 주로 다루고 있으며 알기쉽게 예를 들어서 설명해주는것을 잘해"},
