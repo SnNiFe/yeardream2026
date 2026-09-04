@@ -10,7 +10,8 @@ tokenizer = AutoTokenizer.from_pretrained(model_id)
 model = AutoModelForCausalLM.from_pretrained(
     model_id,
     trust_remote_code=True,
-    torch_dtype=torch.float16,
+    torch_dtype=torch.float16, # dtype = torch.bfloat16 <- 메모리절약 및 안정성 확보(GPU 에서 지원돼야 함)
+    # attn_implementation="flash_attention_2", # "eager","sdpa" (일반적인 기기 환경에서 사용 불가)
     device_map="cpu" # auto, cuda, mps, ...
 )
 
