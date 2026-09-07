@@ -75,3 +75,9 @@ print(prob)
 
 pred = torch.argmax(prob, dim=-1)
 print(f'예측 결과(0:NAV/1:POS) : {pred}')
+
+
+# 모델 저장
+save_path = './my_custom_model'
+model.save_pretrained(save_path)
+tokenizer.save_pretrained(save_path)
