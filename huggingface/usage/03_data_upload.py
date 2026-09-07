@@ -31,3 +31,7 @@ print(f'data : {ds[0]}')
 REPO_ID = 'KORNJ/upload_test_ds_yeardream'
 ds.push_to_hub(REPO_ID,split='train')
 print(f'업로드 완료 : https://huggingface.co/KORNJ/datasets/{REPO_ID}')
+
+# DOWNLOAD
+# dataset = load_dataset(REPO_ID, split='train')
+# print(dataset)
