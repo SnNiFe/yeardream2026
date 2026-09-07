@@ -4,6 +4,7 @@
     Head - 받은 임베딩 내용을 우리가 원하는 최종 결과로 바꿔주는 부분
 """
 from torch import nn, no_grad
+import torch
 from transformers import AutoConfig, AutoTokenizer, PreTrainedModel, AutoModel
 
 
@@ -39,8 +40,8 @@ class CustomClassifier(PreTrainedModel):
         cls_vec = outputs.last_hidden_state[:,0,:]
         print(f'[CLS] vector : {cls_vec}')
         # 2. 커스텀헤드에 보내서 최종 결과값을 받아낸다.
+        return self.custom_head(cls_vec) # 3. 결과값 반환
 
-        # 3. 결과값 반환
 
 # 2단계 : 토크나이저와 모델 준비
 model_id = "distilbert-base-uncased"
@@ -64,3 +65,13 @@ with no_grad():
     logit = model(inputs['input_ids'],inputs['attention_mask'])
 
 print(f'model  출력 : {logit}')
+""" 부정, 긍정
+[0.3951, 0.0360]
+[0.3697, 0.0040]
+"""
+# dim=1|-1 : 가로방향으로 연산, dim=0 : 세로방향으로 연산
+prob = torch.softmax(logit,dim=-1)
+print(prob)
+
+pred = torch.argmax(prob, dim=-1)
+print(f'예측 결과(0:NAV/1:POS) : {pred}')
