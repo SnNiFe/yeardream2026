@@ -19,6 +19,7 @@ def chat_generate(input):
 def chat_stream(input):
     print(f'입력 내용 : {input}')
     print('생각중...')
+    # ollama rm [삭제할 모델 이름]
     resp = chat( # resp = client.chat( # host 설정을 0.0.0.0 으로 했을 경우
         model="exaone3.5:2.4b",
         messages=[{'role':'user', 'content':input}],
