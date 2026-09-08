@@ -10,11 +10,11 @@ predictions = [
 
 # 정답
 references = [
-    {"id":"1","answer":{
+    {"id":"1","answers":{
         "text":["Albert Einstein"],
         "answer_start":[0] # 정답의 시작점
     }},
-    {"id":"2","answer":{
+    {"id":"2","answers":{
         "text":["Tokyo Japan","Tokyo city"],
         "answer_start":[0,0] # 정답의 시작점
     }}
