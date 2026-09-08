@@ -1,3 +1,5 @@
 **/.idea/
 **/node_modules/
 **/my_custom_model/
+**/results/
+**/my_imdb_bert_model/
