@@ -17,7 +17,7 @@ def pre_proc(item):
 accuracy_metric = evaluate.load("accuracy")
 def compute_matrics(eval_pred):
     logits,labels = eval_pred
-    predict = np.argmax(logits, dim=-1)
+    predict = np.argmax(logits, axis=-1)
     return accuracy_metric.compute(predictions=predict, references=labels)
 
 def main():
