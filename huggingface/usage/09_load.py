@@ -27,5 +27,5 @@ answer = input('간단한 질문을 넣어 보세요\n')
 tokens = tokenizer(answer,return_tensors="pt") # .to("cuda")
 print(tokens)
 
-result = model.generate(**tokens, max_new_token=50)
+result = model.generate(**tokens, max_new_tokens=50)
 print(tokenizer.decode(result[0]))
