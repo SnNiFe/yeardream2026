@@ -3,3 +3,4 @@
 **/my_custom_model/
 **/results/
 **/my_imdb_bert_model/
+**/__pycache__/
