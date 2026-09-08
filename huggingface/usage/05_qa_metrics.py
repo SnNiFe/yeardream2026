@@ -1,6 +1,6 @@
 import evaluate
 
-qa_matrics = evaluate.load('squad')
+qa_metrics = evaluate.load('squad')
 
 # 예측값
 predictions = [
@@ -20,5 +20,5 @@ references = [
     }}
 ]
 
-result = qa_matrics.compute(predictions=predictions, references=references)
+result = qa_metrics.compute(predictions=predictions, references=references)
 print(result)
