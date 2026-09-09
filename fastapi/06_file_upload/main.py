@@ -71,3 +71,10 @@ def upload(files:List[UploadFile]):
         logger.error(traceback.format_exc()) # 상세 에러로그 보기
 
     return {"msg":msg}
+
+@app.get("/files")
+def files():
+    # 특정 경로의 파일 리스트를 가져옴
+    file_list = os.listdir(FILE_PATH)
+    logger.info(file_list)
+    return {"files":file_list}

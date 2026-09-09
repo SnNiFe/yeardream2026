@@ -3,8 +3,33 @@
     <head>
         <meta charset="UTF-8"/>
         <title>Title</title>
+        <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+        <style>
+            img.preview{
+                width: 150px;
+                height: 150px;
+                margin: 5px;
+                cursor: pointer;
+                border: 1px solid gray;
+            }
+        </style>
     </head>
     <body>
-
+        <h3>파일 리스트</h3>
+        <div id="img_list"></div>
     </body>
+    <script>
+        axios.get("/files")
+        .then(({data})=>{
+            console.log(data);
+            let content = '';
+            for(let file of data.files){
+                content += '<div>';
+                content +=`<img class="preview" src="/images/${file}" alt="이미지"/>`;
+                content += '</div>';
+            }
+            document.getElementById('img_list').innerHTML=content;
+
+        }).catch(err=>console.log(err));
+    </script>
 </html>
