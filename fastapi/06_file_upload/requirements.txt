@@ -1,0 +1,6 @@
+# web F/W & server
+fastapi
+uvicorn
+
+# upload
+python-multipart
