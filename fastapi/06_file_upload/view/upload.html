@@ -22,6 +22,7 @@
             const form = new FormData(document.getElementById('fileForm'));
             const {data} = await axios.post('/upload',form);
             alert(data.msg);
+            location.href='/view/file_list.html';
         }
     </script>
 </html>

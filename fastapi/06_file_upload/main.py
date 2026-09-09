@@ -1,6 +1,8 @@
 # uv pip install -r requirements.txt
 import logging
 import os
+import shutil
+import traceback
 from typing import List
 import uuid
 
@@ -42,14 +44,30 @@ def main():
 @app.post("/upload")
 def upload(files:List[UploadFile]):
 
-    for file in files:
-        logger.info(f'file name : {file.filename}') # img.png -> 12345678.png
-        ori_filename = file.filename
-        # 1. 파일명과 확장자 분리
-        # name,ext = ori_filename.split('.') # . 을 기준으로 나눈다.
-        name,ext = os.path.splitext(ori_filename) # 확장자 기준으로 나눈다.
-        logger.info(f'{name} / {ext}')
-        # 2. 파일명 변경
-        new_filename = f'{uuid.uuid4()}.{ext}'
-        logger.info(f'new file name = {new_filename}')
-        # 3. 새로운파일명 + 확장자
+    msg = "파일 업로드에 실패 했습니다."
+
+    try:
+        for file in files:
+            logger.info(f'file name : {file.filename}') # img.png -> 12345678.png
+            ori_filename = file.filename
+            # 1. 파일명과 확장자 분리
+            # name,ext = ori_filename.split('.') # . 을 기준으로 나눈다.
+            name,ext = os.path.splitext(ori_filename) # 확장자 기준으로 나눈다.
+            logger.info(f'{name} / {ext}')
+            # 2. 파일명 변경 + 3. 새로운파일명 + 확장자
+            new_filename = f'{uuid.uuid4()}{ext}'
+            logger.info(f'new file name = {new_filename}')
+            # 4. 파일 저장
+            save_path = f'{FILE_PATH}/{new_filename}'
+            # open (파일을 읽는 함수)
+            # w:write, r:read, b:binary, t:text, +:read&write
+            # with 는? 자원을 사용한 후 로직이 종료되면 함께 닫아준다.
+            with open(save_path,'wb') as file_obj:
+                shutil.copyfileobj(file.file,file_obj)
+
+            msg = "파일 업로드에 성공 했습니다."
+    except Exception as e:
+        logger.error(e)
+        logger.error(traceback.format_exc()) # 상세 에러로그 보기
+
+    return {"msg":msg}
