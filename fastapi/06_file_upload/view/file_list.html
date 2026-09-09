@@ -27,6 +27,8 @@
                 content += '<div>';
                 content += `<img class="preview" src="/images/${file}" alt="이미지"/>`;
                 content += `<a href="/delete?filename=${file}">삭제</a>`;
+                content += `&nbsp;&nbsp;&nbsp;&nbsp;`;
+                content += `<a href="/download?filename=${file}">다운로드</a>`;
                 content += '</div>';
             }
             document.getElementById('img_list').innerHTML=content;

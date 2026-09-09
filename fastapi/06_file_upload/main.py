@@ -8,7 +8,7 @@ import uuid
 
 from fastapi import FastAPI, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import RedirectResponse
+from fastapi.responses import FileResponse, RedirectResponse
 from fastapi.staticfiles import StaticFiles
 
 app = FastAPI()
@@ -85,3 +85,11 @@ def delete(filename:str):
     if os.path.exists(path):
         os.remove(path)
     return RedirectResponse("/view/file_list.html")
+
+@app.get("/download")
+def download(filename:str):
+    path = f'{FILE_PATH}/{filename}'
+    if os.path.exists(path):
+        return FileResponse(path,media_type="application/octet-stream",filename=filename)
+    else:
+        return {"msg":"해당 파일이 없습니다."}
