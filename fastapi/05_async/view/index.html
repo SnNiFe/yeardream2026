@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="ko">
+    <head>
+        <meta charset="UTF-8"/>
+        <title>Title</title>
+        <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    </head>
+    <body>
+        <h3>비동기방식</h3>
+        <input type="text" name="msg" value=""/>
+        <input type="button" value="전송" onclick="send()"/>
+    </body>
+    <script>
+        async function send(){
+            console.log('click');
+            let msg = document.querySelector('input[name="msg"]').value;
+            console.log(msg);
+            let {data} = await axios.get('/send?msg='+msg);
+            console.log(data);
+            console.log('전송 종료');
+        }
+    </script>
+</html>
