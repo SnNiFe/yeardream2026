@@ -78,3 +78,10 @@ def files():
     file_list = os.listdir(FILE_PATH)
     logger.info(file_list)
     return {"files":file_list}
+
+@app.get("/delete")
+def delete(filename:str):
+    path = f'{FILE_PATH}/{filename}'
+    if os.path.exists(path):
+        os.remove(path)
+    return RedirectResponse("/view/file_list.html")

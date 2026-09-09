@@ -25,7 +25,8 @@
             let content = '';
             for(let file of data.files){
                 content += '<div>';
-                content +=`<img class="preview" src="/images/${file}" alt="이미지"/>`;
+                content += `<img class="preview" src="/images/${file}" alt="이미지"/>`;
+                content += `<a href="/delete?filename=${file}">삭제</a>`;
                 content += '</div>';
             }
             document.getElementById('img_list').innerHTML=content;
