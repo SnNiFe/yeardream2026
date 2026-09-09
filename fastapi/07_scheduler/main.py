@@ -19,3 +19,13 @@ async def stop():
     sch.pause() # 일시정지
     # sch.shutdown() # 완전히 닫는다.
     return {'msg':'scheduler 정지'}
+
+@app.get("/pause/{task_id}")
+async def pause_job(task_id:str):
+    sch.pause_job(task_id)
+    return {'msg':f'{task_id} 일시정지'}
+
+@app.get("/resume/{task_id}")
+async def resume_job(task_id:str):
+    sch.resume_job(task_id)
+    return {'msg':f'{task_id} 다시실행'}
