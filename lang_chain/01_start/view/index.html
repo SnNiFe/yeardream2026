@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/markdown-it/dist/markdown-it.min.js"></script>
+    <style>
+        #chat-box {
+            width: 90%;
+            height: 400px;
+            border: 1px solid lightgray;
+            padding: 25px;
+            border-radius: 10px;
+            overflow-y: auto;
+        }
+        /* 마크다운 볼드체 및 강조 스타일 */
+        strong {
+            color: red;
+        }
+    </style>
+</head>
+<body>
+    AI 에 질문 하세요 : <input type="text" id="ask"/>
+    <div id="chat-box"></div>
+</body>
+<script>
+    const chatBox = document.getElementById('chat-box');
+    const md = window.markdownit();
+
+    document.querySelector('#ask').addEventListener('keyup',async (e)=>{
+
+        if(e.keyCode === 13){
+            chatBox.innerHTML = "생성 중...";
+            fullResponse = "";
+            const {data} = await axios({
+                method: 'post',
+                url:'/ask/stream',
+                data: {q:e.target.value},
+                responseType: 'stream', // 스트림 타입 설정
+                adapter: 'fetch' // 브라우저 환경에서 fetch 어댑터 강제 사용 (중요!)
+            });
+            const reader = data.getReader(); // 이래야 실시간으로 하나씩 받을 수 있음
+            const decoder = new TextDecoder(); // 스트림은 바이너리로 오기 때문에 텍스트로의 변환이 필수
+
+            while(true){
+                const { done, value } = await reader.read();
+                if (done){
+                    break;
+                }
+
+                const chunk = decoder.decode(value, {stream:true});
+                fullResponse += chunk;
+                chatBox.innerHTML = md.render(fullResponse);
+                chatBox.scrollTop = chatBox.scrollHeight;
+            }
+
+            e.target.value = '';
+        }
+    })
+</script>
+</html>
