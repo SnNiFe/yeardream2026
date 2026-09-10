@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/markdown-it/dist/markdown-it.min.js"></script>
+    <style>
+        #chat-box {
+            width: 90%;
+            height: 400px;
+            border: 1px solid lightgray;
+            padding: 25px;
+            border-radius: 10px;
+            overflow-y: auto;
+        }
+        /* 마크다운 볼드체 및 강조 스타일 */
+        strong {
+            color: red;
+        }
+    </style>
+</head>
+<body>
+    AI 에 질문 하세요 : <input type="text" id="ask"/>
+    <div id="chat-box"></div>
+</body>
+<script>
+    const chatBox = document.getElementById('chat-box');
+    const md = window.markdownit();
+
+    document.querySelector('#ask').addEventListener('keyup',async (e)=>{
+
+        if(e.keyCode === 13){
+            console.log('생각 중...')
+            const {data} = await axios({
+                method: 'post',
+                url:'/ask/batch',
+                data: {q:e.target.value}
+            });
+            console.log(data);
+            //chatBox.innerHTML = data.msg;
+            chatBox.innerHTML = md.render(data.msg);
+            chatBox.scrollTop = chatBox.scrollHeight;
+            e.target.value = '';
+        }
+    })
+</script>
+</html>
