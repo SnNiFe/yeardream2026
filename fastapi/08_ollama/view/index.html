@@ -29,7 +29,7 @@
     const md = window.markdownit();
 
     document.querySelector('#ask').addEventListener('keyup',async (e)=>{
-
+                        // 13 = enter
         if(e.keyCode === 13){
             console.log('생각 중...')
             const {data} = await axios({

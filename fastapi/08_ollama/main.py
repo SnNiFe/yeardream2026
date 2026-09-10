@@ -12,7 +12,7 @@ app.mount("/view",StaticFiles(directory="view"))
 
 @app.get("/")
 def main():
-    return RedirectResponse("/docs")
+    return RedirectResponse("/view/index.html")
 
 # router 등록
 app.include_router(ollama_router.router)
