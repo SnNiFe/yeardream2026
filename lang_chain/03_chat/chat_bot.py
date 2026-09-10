@@ -32,18 +32,18 @@ def output_str(q):
     conversation_history.append(HumanMessage(content=q))
     conversation_history.append(AIMessage(content=answer))
 
-    # # 실행 및 출력
-    # while True:
-    #     query = input('\n당신> ')
-    #     if query == '/exit' or query == '/bye':
-    #         print('대화를 종료 합니다.')
-    #         break
-    #     answer = ''
-    #     for chunk in chain.stream({'query':query,'history':conversation_history}):
-    #         print(chunk.content,end='',flush=True) # StrOutputParse() 를 안써서 .content 붙이는 것
-    #         answer += chunk.content
+# # 실행 및 출력
+# while True:
+#     query = input('\n당신> ')
+#     if query == '/exit' or query == '/bye':
+#         print('대화를 종료 합니다.')
+#         break
+#     answer = ''
+#     for chunk in chain.stream({'query':query,'history':conversation_history}):
+#         print(chunk.content,end='',flush=True) # StrOutputParse() 를 안써서 .content 붙이는 것
+#         answer += chunk.content
 
-    #     conversation_history.append(HumanMessage(content=query))
-    #     conversation_history.append(AIMessage(content=answer))
-    #     print()
-    #     print(f'history length : {len(conversation_history)}')
+#     conversation_history.append(HumanMessage(content=query))
+#     conversation_history.append(AIMessage(content=answer))
+#     print()
+#     print(f'history length : {len(conversation_history)}')

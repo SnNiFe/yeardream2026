@@ -49,9 +49,9 @@
     <h1>챗봇 시스템</h1>
     <div id="chat-box"></div>
 
-    <div id="input-group"> <!--버튼 안눌러도 되게 수정-->
+    <div id="input-group"> <!--버튼 말고 엔터 눌러도 되게 수정-->
         <input type="text" id="input-box" placeholder="궁금한점을 물어보세요." onkeydown="if(event.key === 'Enter' && !event.isComposing) askAI()"/>
-        <button onclick="askAI()">분석 요청</button>
+        <button id="bttn" onclick="askAI()">분석 요청</button>
     </div>
 </body>
 <script>
@@ -62,6 +62,7 @@
 
     async function askAI() {
         const inputBox = document.getElementById('input-box');
+        const bttn = document.getElementById('bttn');
         chatBox.innerHTML = "생성 중...";
         fullResponse = "";
         // 브라우저 Axios는 fetch의 ReadableStream을 활용해야 실시간 처리가 가능합니다.
@@ -75,7 +76,10 @@
         });
         const reader = data.getReader(); // 이래야 실시간으로 하나씩 받을 수 있음
         const decoder = new TextDecoder(); // 스트림은 바이너리로 오기 때문에 텍스트로의 변환이 필수
-        inputBox.value = ""; // **채팅 데이터 받아오고 바로 창 지우기**
+        // **채팅 데이터 받아오고 바로 입력창 지우기**
+        inputBox.value = ""; 
+        inputBox.disabled = true; // 입력 차단
+        bttn.disabled = true; // 입력 차단(버튼)
         while (true) {
             const { done, value } = await reader.read();
             if (done){
@@ -92,6 +96,11 @@
         }
 
         // inputBox.value = "";
+
+        // 입력 다시 활성화 및 포커싱
+        bttn.disabled = false;
+        inputBox.disabled = false;
+        inputBox.focus();
     }
 
 </script>
