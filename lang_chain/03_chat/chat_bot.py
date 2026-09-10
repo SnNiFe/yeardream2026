@@ -47,3 +47,14 @@ def output_str(q):
 #     conversation_history.append(AIMessage(content=answer))
 #     print()
 #     print(f'history length : {len(conversation_history)}')
+"""
+chain = prompt|model # 파이프라인 조립
+def chat_answer(query:str):
+    answer = ''
+    for chunk in chain.stream({'query':query,'history':conversation_history}):
+        answer += chunk.content
+        yield chunk.content
+    conversation_history.append(HumanMessage(content=query))
+    conversation_history.append(AIMessage(content=answer))
+    print(f'history length : {len(conversation_history)}')
+"""
