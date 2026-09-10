@@ -1,0 +1,6 @@
+fastapi
+uvicorn
+langchain-core
+langchain-ollama
+# class model 관련 - post 방식의 파라메터를 담을때 자주 사용
+pydynamic
