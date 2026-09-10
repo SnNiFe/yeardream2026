@@ -17,7 +17,7 @@ model = ChatOllama(model="exaone3.5:2.4b")
 
 # 프롬프트 템플릿 생성
 prompt = ChatPromptTemplate.from_messages([
-    ("system","당신은 리뷰 분석가 입니다. 리뷰를 분석하여 지정된 형식으로 답변하세요."),
+    ("system","당신은 리뷰 분석가 입니다. 리뷰를 분석하여 지정된 형식으로 반드시 한글로만 답변하세요. score의 최고점은 5점 입니다."),
     ("human","리뷰 : {review}")
 ])
 
