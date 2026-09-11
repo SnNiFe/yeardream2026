@@ -11,8 +11,8 @@
             <input type="file" name="files"/>
         </form>
         <input type="button" onclick="save()" value="전송"/>
-        <!-- <h3 id="evalu"></h3>
-        <div id="image"></div> -->
+        <h3 id="evalu"></h3>
+        <!-- <div id="image"></div> -->
     </body>
     <script>
         // 파일 전송시 주의사항
@@ -27,7 +27,7 @@
             const form = new FormData(document.getElementById('fileForm'));
             const {data} = await axios.post('/upload',form);
             console.log(data);
-            // evalu.innerText = data;
+            evalu.innerText = data.result.label+",  score:"+data.result.score*100;
             // image.innerHTML = `<img src="${path}" alt="image"/>`;
         }
     </script>
