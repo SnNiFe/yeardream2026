@@ -21,6 +21,9 @@ IMG_PATH = './upload'
 
 app.mount("/view",StaticFiles(directory="view"))
 
+if not os.path.exists(IMG_PATH):
+    os.makedirs(IMG_PATH)
+
 app.add_middleware(CORSMiddleware,allow_origins=["*"],allow_methods=["*"])
 
 @app.get("/")
@@ -48,6 +51,7 @@ def main():
 def upload(files:UploadFile):
     save_path = f'{IMG_PATH}/{files.filename}'
     msg = 'file upload failed'
+    result = None
     if fileUpload(files.file,save_path) == 1:
         msg = 'file upload success'
         result = class_img(save_path)
