@@ -80,9 +80,7 @@
         });
         const reader = data.getReader(); // 이래야 실시간으로 하나씩 받을 수 있음
         const decoder = new TextDecoder(); // 스트림은 바이너리로 오기 때문에 텍스트로의 변환이 필수
-        // **채팅 데이터 받아오고 바로 입력창 지우기**
-        inputBox.value = ""; 
-        
+  
         while (true) {
             const { done, value } = await reader.read();
             if (done){
@@ -98,7 +96,7 @@
             chatBox.scrollTop = chatBox.scrollHeight;
         }
 
-        // inputBox.value = "";
+        inputBox.value = "";
 
         // 입력 다시 활성화 및 포커싱
         bttn.disabled = false;
