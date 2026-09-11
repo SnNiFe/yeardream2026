@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="ko">
+    <head>
+        <meta charset="UTF-8"/>
+        <title>Title</title>
+        <!-- <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script> -->
+    </head>
+    <body>
+        <form action="/calc" method="get">
+            <input type="text" name="val1" value=""/>
+            <select name="oper">
+                <option value="+">+</option>
+                <option value="-">-</option>
+                <option value="*">*</option>
+                <option value="/">/</option>
+            </select>
+            <input type="text" name="val2" value=""/>
+            <input type="submit" value="전송" /> <!-- onclick="calcAI()"/> -->
+            <h3 id="res">답변이 이곳에 표시 안 됩니다.</h3>
+        </form>
+    </body>
+    <script>
+        // const val1 = document.getElementsByName('val1')[0];
+        // const val2 = document.getElementsByName('val2')[0];
+        // const oper = document.getElementsByName('oper');
+        // const res = document.getElementById('res');
+        // async function calcAI(e) {
+        //     res.innerText = "AI를 이용해 사칙연산을 계산합니다. 잠시만 기다려주세요... (약 2분 소요)";
+        //     e.preventDefault();
+        //     // const {data} = await axios({
+        //     //     method: 'get',
+        //     //     url: '/calc',
+        //     //     data: {a:val1.value, b:val2.value, c:oper.value},
+        //     //     adaptor: 'fetch'
+        //     // })
+        //     // const {value} = await reader.read();
+        //     // res.innerText = value;
+        // }
+    </script>
+</html>

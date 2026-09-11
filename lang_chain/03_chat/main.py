@@ -7,9 +7,9 @@ import chat_bot
 
 app = FastAPI()
 
-app.add_middleware(CORSMiddleware, allow_origins=["*"], allow_methods=["*"])
+app.add_middleware(CORSMiddleware, allow_origins=["*"], allow_methods=["*"]) ##
 app.mount("/view",StaticFiles(directory="view"))
-app.include_router(chat_bot.router)
+app.include_router(chat_bot.router) ##
 
 @app.get("/")
 def main():
