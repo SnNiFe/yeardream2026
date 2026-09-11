@@ -27,7 +27,7 @@
             const form = new FormData(document.getElementById('fileForm'));
             const {data} = await axios.post('/upload',form);
             console.log(data);
-            evalu.innerText = data.result.label+",  score:"+data.result.score*100;
+            evalu.innerText = data.result.label+" ( score:"+(data.result.score*100).toFixed(2)+" )";
             // image.innerHTML = `<img src="${path}" alt="image"/>`;
         }
     </script>
