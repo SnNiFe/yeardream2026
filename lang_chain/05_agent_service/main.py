@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-from fastapi.responses import RedirectResponse
+from fastapi.responses import RedirectResponse, StreamingResponse
 from fastapi.staticfiles import StaticFiles
 
 from agent_service import start_agent
@@ -16,5 +16,4 @@ def index():
 @app.post("/ask/chat")
 def ask_chat(param:ChatModel):
     print(param.q)
-    start_agent(param.q)
-    return None
+    return StreamingResponse(start_agent(param.q),media_type="text/plain")
