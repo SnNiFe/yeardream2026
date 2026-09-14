@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="ko">
+    <head>
+        <meta charset="UTF-8"/>
+        <title>ChatDiary</title>
+        <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    </head>
+    <style>
+        h1{
+            display: block;
+            width: 90;
+            border: 1px solid black;
+            padding: 20px;
+            margin: 20px;
+        }
+        .chatSect{
+            width: 45%;
+            height: 500px;
+            float: left;
+            margin: 20px;
+            border: 1px solid darkblue;
+        }
+        .diarySect{
+            width: 45%;
+            height: 500px;
+            float: right;
+            margin: 20px;
+            border: 1px solid darkblue;
+        }
+        .header{
+            font-size: 20px;
+            font-weight: bold;
+        }
+        div{
+            padding: 10px;
+            margin: 10px;
+        }
+        input{
+            width: 80%;
+            padding: 5px;
+            margin: 5px;
+            float: left;
+        }
+        button{
+            width: 10%;
+            height: 80%;
+            padding: 5px;
+            margin: 5px;
+            float: right;
+        }
+        #inputForm{
+            width: 90%;
+        }
+        #chatBox{
+            border: 1px solid black;
+            flex: 1;
+            min-height: 0;
+            height: 300px;
+            overflow: auto;
+            padding: 10px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        #diary{
+            border: 1px solid black;
+            flex: 1;
+            min-height: 0;
+            height: 380px;
+            overflow: auto;
+            padding: 10px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        .chatting{
+            width: 90%;
+            display: flex;
+        }
+        .bot{
+            border: 1px solid yellow;
+            background-color: beige;
+            justify-content: flex-start;
+            word-break: break-word;
+        }
+        .user{
+            border: 1px solid lightgoldenrodyellow;
+            background-color: blanchedalmond;
+            justify-content: flex-end;
+            word-break: break-word;
+        }
+    </style>
+    <body>
+        <div>
+            <h1>채 팅 일 기</h1>
+            <button style="float: right;" onclick="del()">기록 제거</button>
+        </div>
+        <section class="chatSect">
+            <div class="header">대화형 입력창</div>
+            <hr/>
+            <div id="chatBox">
+                <div class="chatting">
+                    <div class="bot">채팅을 입력하여 일기를 작성해세요!</div>
+                </div>
+                <div class="chatting">
+                    <div class="user">유저 채팅 입력 대기중...</div>
+                </div>
+            </div>
+            <div id="inputForm">
+                <input type="text" id="inp" placeholder="정리하고 싶은 내용을 적어주세요." 
+                    onkeydown="if(event.key==='Enter'&&!event.isComposing)askAI()"/>
+                <button id="btn" onclick="askAI()">전송</button>
+            </div>
+        </section>
+        <section class="diarySect">
+            <div class="header">기록 된 키워드 일기</div>
+            <hr/>
+            <div id="diary">정리 된 내용이 이곳에 표시 됩니다.</div>
+        </section>
+        <script>
+            const inp = document.getElementById('inp');
+            const btn = document.getElementById('btn');
+            const chat = document.getElementById('chatBox');
+            const diary = document.getElementById('diary');
+
+            async function askAI(){
+                const userText = inp.value.trim();
+                chat.innerHTML += `<div class="chatting"><div class="user">${userText}</div></div>`;
+                response = '';
+                const botWrapper = document.createElement('div');
+                botWrapper.className = 'chatting';
+                const botBubble = document.createElement('div');
+                botBubble.className = "bot";
+                botBubble.textContent = '답변 생성중...';
+                botWrapper.appendChild(botBubble);
+                chat.appendChild(botWrapper);
+                chat.scrollTop = chat.scrollHeight;
+                
+                inp.value = '';
+                inp.disabled = true;
+                btn.disabled = true;
+
+                const {data} = await axios({
+                    method: 'post',
+                    url: '/ask/chat',
+                    data: {q:userText},
+                    responseType: 'stream',
+                    adapter: 'fetch'
+                });
+                const reader = data.getReader();
+                const decoder = new TextDecoder();
+                botBubble.textContent = '';
+                while(true){
+                    const {done,value} = await reader.read();
+                    if (done){ break;}
+                    const chunk = decoder.decode(value, {stream:true});
+                    response += chunk;
+                    botBubble.textContent += chunk;
+                    chat.scrollTop = chat.scrollHeight;
+                }
+                inp.disabled = false;
+                btn.disabled = false;
+                inp.focus();
+            }
+
+            function del(){
+                print('기록을 제거합니다.')
+            }
+        </script>
+    </body>
+</html>

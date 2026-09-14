@@ -1,0 +1,52 @@
+[
+  {
+    "type": "human",
+    "data": {
+      "content": "안녕 너는 뭐할수있음?",
+      "additional_kwargs": {},
+      "response_metadata": {},
+      "type": "human",
+      "name": null,
+      "id": null
+    }
+  },
+  {
+    "type": "ai",
+    "data": {
+      "content": "안녕하세요! 저는 당신의 일정을 정리하고 키워드를 분석하여 간결한 일정을 만들어 드리는 일정 관리 AI입니다. 시간, 장소, 행동과 같은 주요 요소들을 입력하시면 도움을 드릴 수 있습니다. 예를 들어, 특정 날짜와 시간대에 어떤 활동을 계획하고 있는지, 또는 현재 어떤 일정이 잡혀있는지 등에 대한 정보를 제공해 주시면 더욱 정확하게 도와드릴 수 있습니다. 어떤 도움이 필요하신가요?",
+      "additional_kwargs": {},
+      "response_metadata": {},
+      "type": "ai",
+      "name": null,
+      "id": null,
+      "tool_calls": [],
+      "invalid_tool_calls": [],
+      "usage_metadata": null
+    }
+  },
+  {
+    "type": "human",
+    "data": {
+      "content": "그럼 26.9.14. 일정 있는데 기록 해줄래?",
+      "additional_kwargs": {},
+      "response_metadata": {},
+      "type": "human",
+      "name": null,
+      "id": null
+    }
+  },
+  {
+    "type": "ai",
+    "data": {
+      "content": "물론이죠! 하지만 현재 실시간 정보에 접근할 수는 없으므로, 제가 당신으로부터 자세히 알려주시면 그 정보를 바탕으로 일정을 작성해드릴 수 있습니다. 다음과 같은 세부 정보를 제공해 주시면 감사하겠습니다:\n\n1. **날짜**: (예: 2023년 9월 14일)\n2. **시간**: (예: 오전 10시)\n3. **장소**: (예: 사무실 회의실)\n4. **주요 행동 또는 활동**: (예: 프로젝트 회의 참석, 미팅 준비, 보고서 작성 등)\n\n이런 정보들을 알려주시면 최선을 다해 일정을 정리해드릴 수 있습니다. 추가 정보가 필요하시거나 다른 도움이 필요하시면 언제든지 말씀해주세요!",
+      "additional_kwargs": {},
+      "response_metadata": {},
+      "type": "ai",
+      "name": null,
+      "id": null,
+      "tool_calls": [],
+      "invalid_tool_calls": [],
+      "usage_metadata": null
+    }
+  }
+]
