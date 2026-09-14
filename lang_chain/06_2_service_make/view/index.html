@@ -8,7 +8,8 @@
     <style>
         h1{
             display: block;
-            width: 90;
+            float: left;
+            width: 90%;
             border: 1px solid black;
             padding: 20px;
             margin: 20px;
@@ -32,8 +33,10 @@
             font-weight: bold;
         }
         div{
+            display: flex;
             padding: 10px;
             margin: 10px;
+            /* border: 1px solid red; */
         }
         input{
             width: 80%;
@@ -93,7 +96,7 @@
     <body>
         <div>
             <h1>채 팅 일 기</h1>
-            <button style="float: right;" onclick="del()">기록 제거</button>
+            <button style="display: block; float: right; height: auto;" onclick="del()">대화 기록 제거</button>
         </div>
         <section class="chatSect">
             <div class="header">대화형 입력창</div>
@@ -102,9 +105,9 @@
                 <div class="chatting">
                     <div class="bot">채팅을 입력하여 일기를 작성해세요!</div>
                 </div>
-                <div class="chatting">
+                <!-- <div class="chatting">
                     <div class="user">유저 채팅 입력 대기중...</div>
-                </div>
+                </div> -->
             </div>
             <div id="inputForm">
                 <input type="text" id="inp" placeholder="정리하고 싶은 내용을 적어주세요." 
@@ -158,14 +161,88 @@
                     botBubble.textContent += chunk;
                     chat.scrollTop = chat.scrollHeight;
                 }
+                loadDiaries();
                 inp.disabled = false;
                 btn.disabled = false;
                 inp.focus();
             }
 
-            function del(){
-                print('기록을 제거합니다.')
+            async function del(){
+                if (!confirm("대화 기록을 정말 초기화할까요?")) return;
+                try {
+                    const response = await axios.post("/ask/chat/delete");
+                    chat.innerHTML = `<div class="chatting">
+                        <div class="bot">이전 채팅 기록이 초기화 되었습니다.</div>
+                        </div>`;
+                    alert(response.data.message);
+                } catch (error) {
+                    console.error("초기화 실패:", error);
+                    alert("초기화 중 오류가 발생했습니다.");
+                }
             }
+
+            async function loadDiaries(){
+                diary.innerText = '일정 불러오는 중.';
+                if (!diary) return;
+                try {
+                    const response = await axios.get("/load/diaries");
+                    const diaries = response.data;
+                    diary.innerHTML = "";
+                        if (diaries.length === 0) {
+                            diary.innerHTML = "<div style='color: #888; text-align: center; padding: 20px;'>등록된 일정이 없습니다.</div>";
+                            return;
+                    }
+
+                    diaries.forEach(d => {
+                        const card = document.createElement("div");
+                        card.style.cssText = `
+                            border: 1px solid #e0e0e0;
+                            border-radius: 8px;
+                            padding: 12px;
+                            margin-bottom: 10px;
+                            background-color: #fafafa;
+                            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+                        `;
+                        card.innerHTML = `
+                            <div style="font-weight: bold; font-size: 0.9em; color: #555; margin-bottom: 4px;">
+                                #${d.id} | 🕒 ${d.time}
+                            </div>
+                            <div style="font-size: 1em; margin-bottom: 4px;">
+                                📍 <strong>장소:</strong> ${d.place}
+                            </div>
+                            <div style="font-size: 1em; color: #222;">
+                                📝 <strong>내용:</strong> ${d.action}
+                            </div>
+                        `;
+                        diary.appendChild(card);
+                    });
+                } catch (error) {
+                    console.error("일정 불러오기 실패:", error);
+                }
+            }
+
+            async function loadChat() {
+                try {
+                    const response = await axios.get("/load/chat");
+                    const history = response.data;
+                    history.forEach(item => {
+                        const wrapper = document.createElement("div");
+                        wrapper.className = "chatting";
+                        const bubble = document.createElement("div");
+                        bubble.className = (item.role === "user") ? "user" : "bot";
+                        bubble.innerText = item.content;
+                        wrapper.appendChild(bubble);
+                        chat.appendChild(wrapper);
+                    });
+                    chat.scrollTop = chat.scrollHeight;
+                } catch (error) {
+                    console.error("채팅 기록 로드 실패:", error);
+                }
+            }
+
+            loadDiaries();
+            loadChat();
+
         </script>
     </body>
 </html>
