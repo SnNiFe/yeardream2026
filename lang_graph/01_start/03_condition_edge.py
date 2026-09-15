@@ -1,4 +1,6 @@
 from langchain_ollama import ChatOllama
+from langgraph.constants import END
+from langgraph.graph import StateGraph
 from pydantic import BaseModel
 
 # 1. 저장소 준비
@@ -8,7 +10,7 @@ class SupportState(BaseModel):
     response:str = ""
 
 # 2. 모델 준비
-llm = ChatOllama(model="gemma4:e2b", temperature=0)
+llm = ChatOllama(model="gemma4:e2b", temperature=0) # gemma4:e4b
 
 # 3. 노드에 등록할 함수 준비
 def analyzer_node(state:SupportState) -> SupportState:
@@ -54,9 +56,31 @@ def route_by_dept(state:SupportState) -> str:
     return node_name
 
 # 4. 저장소/노드 등록
+wf = StateGraph(SupportState)
+wf.add_node("analyzer",analyzer_node)
+wf.add_node("billing",billing_node)
+wf.add_node("tech",technical_node)
 
 # 5. 엣지등록
-
+wf.set_entry_point("analyzer")
+# 시작, 분기함수, {조건에 따라 갈 노드 지정}
+wf.add_conditional_edges(
+    "analyzer", # analyzer 에서 반환한 값을
+    route_by_dept, #  router_by_dept 에 넣어서 그 결과가
+    {
+        "go_to_bill":"billing", # go_to_bill 이면 billing 노드로 보낸다.
+        "go_to_tech":"tech"     # go_to_tech 면 tech 노드로 보낸다.
+    })
+# 각 엣지에 도착한 후 종결(END)
+wf.add_edge("billing",END)
+wf.add_edge("tech",END)
 # 6. 컴파일
+app = wf.compile()
 
 # 7. 실행
+# 지난달 구독상품을 환불받고 싶어요
+# 앱 화면이 하얗게 나타나고 움직이지 않아요
+q = input("문의 내용을 작성 하세요\n")
+for node in app.stream({"query":q},stream_mode="updates"):
+    for key,val in node.items():
+        print(f"{key}:{val}")
