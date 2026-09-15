@@ -17,7 +17,7 @@ def main():
 
 """
 @app.post("/ask/chat")
-def ask_chat(Dict[str,str]): # from typing import Dict
+def ask_chat(info:Dict[str,str]): # from typing import Dict
     print(f'input : {info['q']}')
     return StreamingResponse(chat_answer(info['q']),media_type="text/plain")
 """
