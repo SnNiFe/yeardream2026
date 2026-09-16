@@ -58,6 +58,7 @@ app = wf.compile(checkpointer=memory, interrupt_before=['send'])
 config = {'configurable':{'thread_id':uuid.uuid4()}}
 result = app.invoke({"title":"전사 야유회 참여 공지 메일"},config)
 
+# 메모리에 뭐가 저장되어있는지 확인차원(뭘했는지? 다음에 뭘 할건지?)
 state_snapshot = app.get_state(config)
 # print(state_snapshot)
 print(state_snapshot.values) # 현재 데이터 상태
