@@ -58,8 +58,10 @@ app = wf.compile(checkpointer=memory, interrupt_before=['send'])
 config = {'configurable':{'thread_id':uuid.uuid4()}}
 result = app.invoke({"title":"전사 야유회 참여 공지 메일"},config)
 
-state_snapshot = app.set_state(config)
-print(state_snapshot)
+state_snapshot = app.get_state(config)
+# print(state_snapshot)
+print(state_snapshot.values) # 현재 데이터 상태
+print(state_snapshot.next) # 대기중인 노드
 
 yn = input('작성된 초안을 승인하고 발송 하시겠습니까?')
 if yn.lower().strip() == 'y':
