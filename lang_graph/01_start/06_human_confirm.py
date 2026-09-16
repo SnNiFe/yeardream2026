@@ -1,6 +1,9 @@
 # 1. 저장소 생성
+import uuid
+
 from langchain_ollama import ChatOllama
 from langgraph.graph import END, StateGraph
+from langgraph.checkpoint.memory import MemorySaver
 from pydantic import BaseModel
 
 
@@ -44,9 +47,26 @@ wf.set_entry_point("writer")
 wf.add_edge("writer","send")
 wf.add_edge("send",END)
 
-# 6. 컴파일
-app = wf.compile()
+# 6. 컴파일(저장소,정지포인트)
+# checkpointer = 어디에 저장할 것인가?
+# inturrupt_before = 어떤 노드 전에 세울 것이냐?
+memory = MemorySaver()
+app = wf.compile(checkpointer=memory, interrupt_before=['send'])
 
 # 7. 실행
-result = app.invoke({"title":"전사 야유회 참여 공지 메일"})
-print(result)
+# 현재 이것을 실행하는 thread id 를 지정(어떤 프로세스인지 식별하기 위해)
+config = {'configurable':{'thread_id':uuid.uuid4()}}
+result = app.invoke({"title":"전사 야유회 참여 공지 메일"},config)
+
+state_snapshot = app.set_state(config)
+print(state_snapshot)
+
+yn = input('작성된 초안을 승인하고 발송 하시겠습니까?')
+if yn.lower().strip() == 'y':
+    print('승인 완료 발송 시작')
+    print(f'memory : {memory}')
+    app.invoke(None, config)
+else:
+    print('발송이 거부 되었습니다.')
+
+# print(result)
