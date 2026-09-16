@@ -75,9 +75,11 @@ def route_by_review(state:WriteState) -> str:
 wf = StateGraph(WriteState)
 # 5. 노드 등록
 wf.add_node('writer',write_node)
+wf.add_node('critic',critic_node)
 # 6. 엣지 등록(조립)
 wf.set_entry_point('writer')
-wf.add_edge('writer',END)
+wf.add_edge('writer','critic')
+wf.add_edge('critic',END) # MAC : ^ + space
 # 7. 컴파일
 app = wf.compile()
 # 8. 실행
