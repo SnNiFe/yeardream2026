@@ -108,8 +108,8 @@ wf.add_conditional_edges(
     'critic',
     route_by_review,
     {
-        'go_end':END
-        'go_retry':'writer'
+        'go_end':END,
+        "go_retry":'writer'
     }
     ) # MAC : ^ + space
 # 7. 컴파일
