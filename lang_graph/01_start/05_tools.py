@@ -1,8 +1,8 @@
-from typing import Annotated, TypedDict
+from typing import Annotated, Dict, TypedDict
 from langchain_core.tools import tool
-from langchain_core.messages import BaseMessage
+from langchain_core.messages import BaseMessage, HumanMessage
 from langchain_ollama import ChatOllama
-from langgraph.graph import add_messages
+from langgraph.graph import END, StateGraph, add_messages
 
 # 1. 상태 저장소 생성 : class 를 Dictionary 처럼 여기게 해줌
 class AgentState(TypedDict):
@@ -32,11 +32,29 @@ tools = [multiply]
 model = llm.bind_tools(tools)
 
 # 5. 노드 및 라우트함수 선언
+def agent_node(state:AgentState) -> Dict:
+    """사용자의 질문을 받아 응답하는 노드"""
+    print('사용자 메시지를 받아서 분석중...')
+    resp = model.invoke(state['messages'])
+    print(f"[AGENT NODE]     {resp}")
+    return {'messages':[resp]}
 
-# 6. 노드 등록
+# 6. 저장소 및 노드 등록
+wf = StateGraph(AgentState)
+wf.add_node("agent",agent_node)
 
 # 7. 엣지 조립
+wf.set_entry_point("agent")
+wf.add_edge("agent",END)
 
 # 8. 컴파일
+app = wf.compile()
 
 # 9. 실행
+resp = app.invoke({'messages':[HumanMessage(content="256 곱하기 4가 무엇인지 계산해 주세요")]})
+"""
+HumanMessage    : 사용자가 보내는 메시지(content)
+AIMessage       : LLM 모델이 생성한 메시지(content,tool_calls)
+ToolMessage     : Tool 이 수행후 반환하는 메시지(content,tool_call_id)
+"""
+print(f'최종 : {resp}')
