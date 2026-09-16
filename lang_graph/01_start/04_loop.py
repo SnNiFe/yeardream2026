@@ -64,6 +64,7 @@ def critic_node(state:WriteState) -> WriteState:
             "feedback":"state 가 RETRY 일 경우 조건을 만족하지 못하는 이유, PASS 일 경우 칭찬"
         }}
     """
+    print('검증 중...')
     resp = llm.invoke(prompt)
     print(resp.content) # JSON 형태만 깔끔하게 잘 나오는가?
 
