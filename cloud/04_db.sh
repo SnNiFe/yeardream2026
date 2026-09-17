@@ -28,5 +28,5 @@ CREATE USER 'web_user'@'%' IDENTIFIED BY 'user@pass';
 SELECT user,password FROM mysql.user;
 
 # 권한 생성
-# GRANT [권한 종류] ON [어디에서 사용할수 있는지] TO [권한줄 유저]
+# GRANT [권한 종류] ON [어디에서 사용할수 있는지] TO [권한줄 유저] (..ON db.table TO..)
 GRANT ALL PRIVILEGES ON *.* TO 'web_user'@'%';
