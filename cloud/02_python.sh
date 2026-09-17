@@ -27,5 +27,11 @@ uvicorn
 # ESC -> :wq
 cat requiremnents.txt
 
+# 라이브러리 설치
+uv pip install -r requirements.txt
+
+# 실행
+uvicorn main:app --host=0.0.0.0 --port=8000 --workers 2
+
 # 가살환경 종료
 deactivate
