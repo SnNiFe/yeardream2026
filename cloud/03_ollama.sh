@@ -40,3 +40,9 @@ uv pip install requirements.txt
 
 # 서버시작
 uvicorn main:app --host=0.0.0.0 --port=8000
+
+# 종료
+# ^C (ctrl+c)
+deactivate # 가상화 종료
+cd ../     # 현재 위치에서 한단계 올라가서
+rm -rf app # app 폴더 삭제
