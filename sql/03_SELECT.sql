@@ -64,4 +64,42 @@ SELECT e.email FROM employees e WHERE e.email LIKE '%com';
 SELECT e.email FROM employees e WHERE e.email LIKE '%se%';
 SELECT e.email FROM employees e WHERE e.email LIKE '%s%e%';
 
+-- 3. 정렬(ORDER BY)
+-- ORDER BY [컬럼명] [ASC|DESC]
+-- 조건 검색 > 정렬 순
+SELECT * FROM employees e WHERE e.salary > 2000000 ORDER BY e.salary DESC;
 
+-- salsry 로 내림차순, 동률에 대해서 first_name 오름차순
+SELECT * FROM employees e WHERE e.salary > 2000000 ORDER BY e.salary DESC, e.first_name ASC;
+
+-- GROUP BY
+-- 데이터를 특정 컬럼을 기준으로 묶어서 가져온다.(통계)
+SELECT DISTINCT e.depart_no FROM employees e;
+SELECT * FROM employees e;
+-- dev001 ~ dev005 급여총합?
+SELECT e.depart_no, SUM(e.salary) FROM employees e ORDER BY e.depart_no; -- d1: 9590, d2: 9680, d3: 1840, d4: 2520, d5: 770
+SELECT e.depart_no, SUM(e.salary) FROM employees e WHERE e.depart_no = 'dev001'; -- 9,590
+SELECT e.depart_no, SUM(e.salary) FROM employees e WHERE e.depart_no = 'dev002'; -- 9,680
+SELECT e.depart_no, SUM(e.salary) FROM employees e WHERE e.depart_no = 'dev003'; -- 1,840
+SELECT e.depart_no, SUM(e.salary) FROM employees e WHERE e.depart_no = 'dev004'; -- 2,520
+SELECT e.depart_no, SUM(e.salary) FROM employees e WHERE e.depart_no = 'dev005'; -- 770
+
+-- 특정 기준으로 묶어서 보여줌(각 기준별 1row 가 나와야 하기에 연산이 꼭 들어가야 한다.)
+-- 연산이 들어가지 않으면 row 의 가장 첫값을 보여준다.(원래는 에러가 나타남)
+SELECT e.depart_no, SUM(e.salary) as 총급여 FROM employees e GROUP BY e.depart_no;
+
+-- 각 부서별 급여 합계(SUM)와 인센티브(commission) 의 평균(AVG)을 구해보자
+SELECT e.depart_no, SUM(e.salary) as 총급여, AVG(IFNULL(e.commission, 0)) as 평균인센티브 FROM employees e GROUP BY e.depart_no;
+SELECT e.depart_no, SUM(e.salary) as 총급여, SUM(e.commission)/COUNT(*) as 평균인센티브 FROM employees e GROUP BY e.depart_no;
+
+SELECT e.depart_no, SUM(e.salary) as 총급여, AVG(e.commission) as 평균인센티브 FROM employees e GROUP BY e.depart_no;
+
+-- 급여평균, 인원수
+SELECT e.depart_no, FLOOR(AVG(e.salary)) as 급여평균, COUNT(e.depart_no) as 인원 FROM employees e GROUP BY e.depart_no;
+
+-- HAVING : GROUP BY 로 받아온 데이터에 대해서 조건을 주는것(WHERE)
+SELECT e.depart_no, FLOOR(AVG(e.salary)) as 급여평균, COUNT(e.depart_no) as 인원 FROM employees e GROUP BY e.depart_no HAVING 급여평균 > 5000000;
+
+-- HAVING 에 별칭이 통하지 않는 DB 도 있다.
+-- 그 경우 별칭을 주기전 이름으로 사용해야 한다.
+SELECT e.depart_no, FLOOR(AVG(e.salary)) as 급여평균, COUNT(e.depart_no) as 인원 FROM employees e GROUP BY e.depart_no HAVING FLOOR(AVG(e.salary)) > 5000000;
