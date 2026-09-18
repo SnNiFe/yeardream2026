@@ -22,5 +22,5 @@ DESC employees;
 SELECT * FROM employees as e;
 
 
-UPDATE employees SET commission = 90 WHERE emp_no = 128;
+UPDATE employees SET mobile = '01011112222' WHERE emp_no = 129;
 UPDATE employees SET commission = NULL WHERE emp_no = 130;
