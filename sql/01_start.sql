@@ -67,7 +67,7 @@ CREATE TABLE employees(
 	last_name VARCHAR(2),
 	email VARCHAR(50),
 	mobile VARCHAR(11),
-	salsry INT(8),
+	salary INT(8),
 	reg_date DATE DEFAULT CURDATE()
 );
 
