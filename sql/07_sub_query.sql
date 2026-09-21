@@ -36,3 +36,11 @@ INSERT INTO emp (ename,job,deptno,hiredate)values('gang', 'staff', 2, STR_TO_DAT
 
 INSERT INTO emp (ename,job,deptno,hiredate)values('nam', 'leader', 4, STR_TO_DATE('20/01/02','%Y/%m/%d'));
 SELECT * FROM emp;
+
+-- 문제1> han 의 근무 부서 이름?
+SELECT ename, deptno FROM emp WHERE ename = 'han'; -- deptno = 1
+SELECT deptno, deptname FROM dept WHERE deptno = 1; -- sales
+
+SELECT deptname FROM dept 
+	WHERE deptno = (SELECT deptno FROM emp WHERE ename = 'han');
+
