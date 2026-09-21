@@ -57,5 +57,30 @@ SELECT e.ename, d.deptno, d.deptname
 SELECT e.ename, d.deptno, d.deptname
 	FROM emp e RIGHT OUTER JOIN dept d ON e.deptno = d.deptno;
 
+-- dept 에는 없고 emp 에만 있는 deptno 를 넣으려고 한다.
+-- dept 는 emp 의 부모이기 때문에 emp 에 없는 deptno 란 있을 수 없다.
+-- 부모자식 관계를 제거할 예정(FK 제거)
+-- 제약조건 삭제
+-- ALTER TABLE [테이블명] DROP CONSTRAINT [제약조건 이름]
+SELECT * FROM information_schema.TABLE_CONSTRAINTS WHERE TABLE_NAME = 'emp';
+ALTER TABLE emp DROP CONSTRAINT fk_emp;
+DESC emp;
+
+-- emp 에 deptno 6 을 추가
+INSERT INTO emp
+	VALUES ('kim', 'assistant', 6, STR_TO_DATE('14-06-02','%Y-%m-%d'));
+
+SELECT * FROM emp;
+
+-- emp 에 있는 deptno 를 기준으로 보여줘
+SELECT e.ename, e.deptno, d.deptname
+	FROM emp e LEFT JOIN dept d ON e.deptno = d.deptno;
+
+-- LEFT JOIN + RIGHT JOIN = FULL OUTER JOIN
+-- mariaDB 에서는 지원하지 않는다.(다른 방법이 있어서...)
+
+
+
+
 
 
