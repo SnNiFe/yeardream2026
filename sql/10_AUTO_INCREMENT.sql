@@ -14,3 +14,16 @@ INSERT INTO auto_inc (name) VALUES ('kim');
 INSERT INTO auto_inc (name) VALUES ('lee');
 INSERT INTO auto_inc (name) VALUES ('park');
 SELECT * FROM auto_inc;
+
+
+CREATE TABLE test(
+	no INT(10),
+	name VARCHAR(10) NOT NULL
+);
+
+INSERT INTO test (no,name) VALUES (1, 'a');
+SELECT * FROM test;
+
+-- 이미 생성된 테이블에 추가
+ALTER TABLE test MODIFY no INT(10) PRIMARY KEY AUTO_INCREMENT;
+INSERT INTO test (name) VALUES ('a');
