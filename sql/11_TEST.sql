@@ -148,11 +148,11 @@ ORDER BY e.hire_date ; -- 0.009s
 
 -- 문제 5. 현재 직원들의 사번, 이름, 직책, 급여
 
-SELECT t.title, s.salary FROM titles t JOIN salaries s ON t.emp_no = s.emp_no WHERE t.to_date = '9999-01-01';
+SELECT t.title, s.salary FROM titles t JOIN salaries s ON t.emp_no = s.emp_no WHERE s.to_date = '9999-01-01';
 SELECT e.emp_no, e.last_name, e.first_name FROM employees e;
 
-SELECT e.emp_no, CONCAT(e.last_name, ' ', e.first_name) AS name, t.title, MAX(s.salary) AS salary FROM employees e
-JOIN titles t ON e.emp_no = t.emp_no JOIN salaries s ON t.emp_no = s.emp_no WHERE t.to_date = '9999-01-01' GROUP BY e.emp_no ORDER BY e.emp_no;
+SELECT e.emp_no, CONCAT(e.last_name, ' ', e.first_name) AS name, t.title, s.salary AS salary FROM employees e
+JOIN titles t ON e.emp_no = t.emp_no JOIN salaries s ON t.emp_no = s.emp_no WHERE s.to_date = '9999-01-01' GROUP BY e.emp_no ORDER BY e.emp_no; -- 0.016s
 
 
 
