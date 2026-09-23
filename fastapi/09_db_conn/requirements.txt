@@ -1,0 +1,7 @@
+# uv pip install -r requirements.txt
+uvicorn
+fastapi
+
+# DBEABER 처럼 DB 에 연결해주고 쿼리문을 실행하고, 결과를 보여주는 라이브러리
+pymysql
+sqlalchemy
