@@ -23,11 +23,11 @@ def db_conn():
         # 3. 세션(커넥션)생성(매니저가 금고를 가져옴)
         session = sessionmaker(bind=engine)
         conn = session()
-
         msg = 'DB 접속에 성공 했습니다.'
     except Exception as e:
         print(e)
     finally:
         # 4. 다 사용 후 반납(매니저에게 개인금고를 반납)
-        conn.close()
+        if conn is not None:
+            conn.close()
     return {"msg":msg}
