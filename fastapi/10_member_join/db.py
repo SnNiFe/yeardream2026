@@ -33,5 +33,5 @@ CREATE TABLE member(
     email VARCHAR(50)
 );
 
-SELECT COUNT(*) AS use FROM member WHERE id = 'admin';
+SELECT COUNT(*) AS cnt FROM member WHERE id = 'admin';
 """
