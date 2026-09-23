@@ -97,19 +97,62 @@ SELECT
 	de.to_date 
 FROM departments d JOIN dept_emp de ON d.dept_no = de.dept_no;
 
-
-SELECT
+-- 2) employees 와 JOIN
+SELECT 
 	de.emp_no,
-	de.dept_no,
+	d.dept_name,
+	CONCAT(e.first_name, ', ', e.last_name) AS name,
 	de.from_date,
-	de.to_date
-FROM dept_emp de JOIN departments d ON de.dept_no = d.dept_no JOIN employees e ON de.emp_no = e.emp_no
+	de.to_date 
+FROM departments d JOIN dept_emp de ON d.dept_no = de.dept_no 
+JOIN employees e ON de.emp_no = e.emp_no 
+-- 부서 이동이 있는 사람들만 추려서...
 WHERE de.emp_no
 IN (SELECT de.emp_no FROM dept_emp de GROUP BY emp_no HAVING COUNT(de.emp_no) > 1)
-ORDER BY emp_no, from_date;
+-- 이후 emp_no 와 to_date 순으로 정렬
+ORDER BY de.emp_no, de.to_date; -- 1.294s
 
 
+-- 문제 4. 현재 MANAGER 들의 이름, 성별, 입사일, 소속팀명
 
+SELECT * FROM dept_manager WHERE to_date = '9999-01-01';
+SELECT * FROM employees WHERE emp_no IN (SELECT emp_no FROM dept_manager WHERE to_date = '9999-01-01');
+SELECT d.dept_name FROM dept_emp de JOIN departments d ON de.dept_no = d.dept_no;
+
+SELECT 
+	CONCAT(e.last_name, ' ', e.first_name),
+	IF(e.gender = 'M', 'Male', 'Female') AS gender,
+	e.hire_date,
+	d.dept_name
+FROM employees e JOIN dept_emp de ON e.emp_no = de.emp_no JOIN departments d ON de.dept_no = d.dept_no
+WHERE e.emp_no IN (SELECT emp_no FROM dept_manager WHERE to_date = '9999-01-01'); -- .0.35s
+
+-- 현재 팀장들의 사원번호와 팀번호
+SELECT dm.emp_no, dm.dept_no FROM dept_manager dm WHERE dm.to_date = '9999-01-01';
+-- 사원정보
+SELECT e.first_name, e.last_name, e.gender, e.hire_date FROM employees e WHERE e.emp_no = '110039';
+-- 팀 이름
+SELECT d.dept_name FROM departments d WHERE d.dept_no = 'd001';
+
+-- JOIN?(1개이상 컬럼을 가져올때) 서브쿼리?(1개컬럼 가져올 경우) 어느게 좋은가?
+-- 1단계 : dept_manager 와 employees 를 JOIN
+-- 2단계 : dept_name 에 대해서만 서브쿼리로 가져온다.
+SELECT 
+	CONCAT(e.first_name, ', ', e.last_name) AS name,
+	e.gender,
+	e.hire_date,
+	(SELECT dept_name FROM departments WHERE dept_no = dm.dept_no) AS team_name
+FROM dept_manager dm NATURAL JOIN employees e
+ORDER BY e.hire_date ; -- 0.009s
+
+
+-- 문제 5. 현재 직원들의 사번, 이름, 직책, 급여
+
+SELECT t.title, s.salary FROM titles t JOIN salaries s ON t.emp_no = s.emp_no WHERE t.to_date = '9999-01-01';
+SELECT e.emp_no, e.last_name, e.first_name FROM employees e;
+
+SELECT e.emp_no, CONCAT(e.last_name, ' ', e.first_name) AS name, t.title, MAX(s.salary) AS salary FROM employees e
+JOIN titles t ON e.emp_no = t.emp_no JOIN salaries s ON t.emp_no = s.emp_no WHERE t.to_date = '9999-01-01' GROUP BY e.emp_no ORDER BY e.emp_no;
 
 
 
