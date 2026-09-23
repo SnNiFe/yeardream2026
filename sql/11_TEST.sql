@@ -154,7 +154,24 @@ SELECT e.emp_no, e.last_name, e.first_name FROM employees e;
 SELECT e.emp_no, CONCAT(e.last_name, ' ', e.first_name) AS name, t.title, s.salary AS salary FROM employees e
 JOIN titles t ON e.emp_no = t.emp_no JOIN salaries s ON t.emp_no = s.emp_no WHERE s.to_date = '9999-01-01' GROUP BY e.emp_no ORDER BY e.emp_no; -- 0.016s
 
+-- 
+SELECT e.emp_no, e.last_name, e.first_name FROM employees e;
+SELECT t.emp_no, t.title FROM titles t WHERE t.to_date = '9999-01-01';
+SELECT s.emp_no, s.salary FROM salaries s WHERE s.to_date = '9999-01-01';
+-- 조랍
+-- NULL 이 나타나는 데이터 발생(알고보니 employees 는 퇴사자의 데이터도 모두 가지고 있음)
+-- 그리고 그사람이 퇴사상태인지 알 수 있는 방법도 없음
+SELECT
+	e.emp_no,
+	CONCAT(e.first_name, ', ', e.last_name) AS name,
+	(SELECT t.title FROM titles t WHERE t.to_date = '9999-01-01' AND t.emp_no = e.emp_no) AS 직책,
+	(SELECT s.salary FROM salaries s WHERE s.to_date = '9999-01-01' AND s.emp_no = e.emp_no) AS 급여
+FROM employees e;
 
-
-
-
+-- 그래서 기본 데이터를 titles 에서 시작한다.
+SELECT 
+	t.emp_no, 
+	(SELECT CONCAT(first_name,', ',last_name) FROM employees WHERE emp_no = t.emp_no) AS 이름,
+	t.title,
+	(SELECT salary FROM salaries WHERE emp_no = t.emp_no AND to_date = '9999-01-01') AS 급여
+FROM titles t WHERE t.to_date = '9999-01-01'; -- 0.013s
