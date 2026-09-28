@@ -35,7 +35,7 @@ print(f'일치 여부 : {yn}')
 # JWT
 # 비밀키, 알고리즘종류,유지시간
 SECRET_KEY = secrets.token_hex(32)
-ALGORITHM = "SH256"
+ALGORITHM = "HS256"
 TOKEN_EXPIRE_MIN = 30
 
 def get_token(data:dict[str,Any]) -> str:
