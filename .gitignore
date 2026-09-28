@@ -5,3 +5,4 @@
 **/my_imdb_bert_model/
 **/__pycache__/
 **/before_test/
+**/my_db/
