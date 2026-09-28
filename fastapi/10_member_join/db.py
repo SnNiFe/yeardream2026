@@ -1,13 +1,17 @@
 # DB 연결 및 커넥션 생성
 
 # 1. 접속 정보 준비
+from urllib.parse import quote_plus
+
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
 
 id = 'web_user'
-pw = 'user@pass'
-host = '54.180.107.203'
+# 비밀번호에 @가 들어가 있으면 host 앞의 @ 와 혼동이 생긴다.
+pw = quote_plus('user@pass') # @ 같은 특수문자를 '' 처럼 문자열로 취급하게 함
+# user@pass@localhost:3306 -> 'user@pass'localhost:3306
+host = '3.34.125.125'
 port = 3306
 database = 'mydb'
 url = f'mysql+pymysql://{id}:{pw}@{host}:{port}/{database}'
