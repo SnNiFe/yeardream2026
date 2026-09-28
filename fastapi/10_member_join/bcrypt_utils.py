@@ -1,5 +1,10 @@
 # Hash 암호화
+import datetime
+import secrets
+from typing import Any, Dict
+
 import bcrypt
+import jwt
 
 
 def encode_pass(plain:str):
@@ -26,3 +31,41 @@ print(f'일치 여부 : {yn}')
 # $2b$12$15dqjnB4kq6tHjriMWUIZuQiEjiQxZstekA9fJsznOrWfbyw6bBUa
 # $2b$12$FHxlISWceAuzTx6WC/SN3umrMyAeoQ9MuB1nIu5nITpqgWvCp6t.6
 """
+
+# JWT
+# 비밀키, 알고리즘종류,유지시간
+SECRET_KEY = secrets.token_hex(32)
+ALGORITHM = "SH256"
+TOKEN_EXPIRE_MIN = 30
+
+def get_token(data:dict[str,Any]) -> str:
+    """
+    특정한 내용을 넣으면 토큰으로 생성
+    :param data: 토큰에 저장할 내용
+    :return: 토큰 문자열
+    """
+    # 내용에는 토큰 수명도 추가해야 한다.
+    expire_time = datetime.datetime.now() + datetime.timedelta(minutes=TOKEN_EXPIRE_MIN)
+    data.update({'exp':expire_time})
+    # jwt.encode(내용,비밀키,알고리즘)
+    return jwt.encode(data,SECRET_KEY,algorithm=ALGORITHM)
+
+def verify_token(token:str) -> Dict[str,Any]:
+    """
+    특정한 내용을 넣으면 토큰으로 생성
+    :param data: 토큰 문자열
+    :return: 토큰의 내용이 담긴 Dict
+    """
+    payload = None
+    try:
+        payload = jwt.decode(token,SECRET_KEY,algorithms=ALGORITHM)
+    except Exception as e: # 비밀키가 틀렸거나, 토큰 시간이 만료된 경우
+        print(e)
+
+    return payload
+
+
+result_token = get_token({"id":"test","name":"naak"})
+print(f'생성된 토큰 : {result_token}')
+result_payload = verify_token(result_token)
+print(f'payload : {result_payload}')
