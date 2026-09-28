@@ -1,12 +1,12 @@
 import logging
 from typing import Any, Dict
 
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
 from fastapi.responses import RedirectResponse
 from fastapi.staticfiles import StaticFiles
 from sqlalchemy import text
 
-from bcrypt_utils import encode_pass, matches
+from bcrypt_utils import encode_pass, get_token, matches
 from db import get_conn
 
 
@@ -26,7 +26,7 @@ def main():
     return RedirectResponse("/view/login.html")
 
 @app.post("/login")
-def login(info:Dict[str,str]):
+def login(info:Dict[str,str], req:Request):
     json = {'success':False, 'token':''}
     logger.info(f'info={info}')
     # 이 사람이 회원이라는 것을 어떻게 증명?
@@ -40,7 +40,9 @@ def login(info:Dict[str,str]):
         # 아이디 비밀번호가 모두 일치 하면 True, 아니면 False
         success = matches(info['pw'],result['pw'])
         # 3. True 일 경우 로그인 성공으로 가정
-        json.update({'success':success,'token':''})
+        if success:
+            token = get_token({"id":info["id"],"ip":req.client.host})
+            json.update({'success':success,'token':token})
         pass
     except Exception as e:
         logger.error(e)

@@ -64,8 +64,9 @@ def verify_token(token:str) -> Dict[str,Any]:
 
     return payload
 
-
+"""
 result_token = get_token({"id":"test","name":"naak"})
 print(f'생성된 토큰 : {result_token}')
 result_payload = verify_token(result_token)
 print(f'payload : {result_payload}')
+"""
