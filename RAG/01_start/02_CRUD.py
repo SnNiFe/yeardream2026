@@ -28,7 +28,7 @@ print(f'ids 를 활용해 데이터 가져오기 : {results}')
 results = coll.query(query_texts=["비밀번호 찾기"], n_results=1)
 print(f"{results['documents']} / {results['distances']}")
 
-# 3. 데이터 수정
+# 3. 데이터 수정 upsert: add or update
 coll.update(
     documents=["로그인 방법 : 우측 상단 '로그인' 버튼 클릭 후 아이디 입력"],
     metadatas=[{"category":"auth","importance":3}],
