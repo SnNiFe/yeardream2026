@@ -6,7 +6,7 @@ from fastapi.responses import RedirectResponse
 from fastapi.staticfiles import StaticFiles
 from sqlalchemy import text
 
-from bcrypt_utils import encode_pass, get_token, matches
+from bcrypt_utils import encode_pass, get_token, matches, verify_token
 from db import get_conn
 
 
@@ -43,7 +43,6 @@ def login(info:Dict[str,str], req:Request):
         if success:
             token = get_token({"id":info["id"],"ip":req.client.host})
             json.update({'success':success,'token':token})
-        pass
     except Exception as e:
         logger.error(e)
     finally:
@@ -100,3 +99,30 @@ def join(info:Dict[str,Any]): # POST 방식은 파라메터를 Dict 또는 class
     finally:
         conn.close() # DB 접속 종료
     return {'row':row}
+
+@app.get("/list/{page}")
+def list_page(page:int, req:Request):
+    logger.info(f'page={page}')
+    login_id = req.query_params.get("id")
+    client_ip = req.client.host
+    token = req.headers.get("Authorization")
+
+    logger.info(f"id={login_id}")
+    logger.info(f"ip={client_ip}")
+    logger.info(f"token={token}")
+    msg = "로그인이 필요한 서비스 입니다."
+
+    try:
+        payload = verify_token(token)
+        logger.info(f"payload : {payload}")
+        if payload is not None:
+            if payload.get("id") == login_id and payload.get("ip") == client_ip:
+                msg = "로그인된 회원이 맞습니다. 계속 진행"
+        else:
+            msg = "토큰 정보가 일치하지 않습니다."
+
+    except Exception as e:
+        logger.error(e) # 비밀키가 변경되거나 토큰 만료시간이 지났을때
+        msg = "토큰이 만료 되었습니다. 다시 로그인을 해 주세요."
+
+    return {"msg":msg}
