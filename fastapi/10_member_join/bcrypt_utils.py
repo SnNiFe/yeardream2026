@@ -15,6 +15,7 @@ def encode_pass(plain:str):
 def matches(plain:str,hash:str) -> bool:
     return bcrypt.checkpw(plain.encode("utf-8"),hash.encode("utf-8"))
 
+"""
 plain_text = input('암호화 하려는 문자열을 입력 하세요')
 hash_text = encode_pass(plain_text)
 print(hash_text)
@@ -22,8 +23,6 @@ print(hash_text)
 confirm_text = input('방금 입력한 암호를 다시 입력해 보세요')
 yn = matches(confirm_text, hash_text)
 print(f'일치 여부 : {yn}')
-
-
-
 # $2b$12$15dqjnB4kq6tHjriMWUIZuQiEjiQxZstekA9fJsznOrWfbyw6bBUa
 # $2b$12$FHxlISWceAuzTx6WC/SN3umrMyAeoQ9MuB1nIu5nITpqgWvCp6t.6
+"""

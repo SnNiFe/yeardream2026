@@ -1,0 +1,69 @@
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>Cacading Style Sheet</title>
+        <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+        <style>
+            table, th{
+                border: 1px solid black;
+                border-collapse: collapse;
+            }
+            th{
+                width: 50px;
+                padding: 10px;
+            }
+            input[type="submit"]{
+                height: 60px;
+            }
+        </style>
+    </head>
+    <body>
+        <h1>로그인 페이지</h1>
+        <hr/>
+        <table>
+            <tr>
+                <th>ID</th>
+                <th><input type="text" name="id"/></th>
+                <th rowspan="2">
+                    <input type="submit" value="로그인" onclick="login()"/>
+                </th>
+            </tr>
+            <tr>
+                <th>PW</th>
+                <th><input type="password" name="pw"/></th>
+            </tr>
+            <tr>
+                <th colspan="3">
+                    <input type="button" value="회원가입" onclick="regist()">
+                    <input type="button" value="아이디/비번찾기">
+                </th>
+            </tr>
+        </table>
+    </body>
+    <script>
+        sessionStorage.clear();
+        async function login(){
+            let param = {
+                'id' : $('input[name="id"]').val(),
+                'pw' : $('input[name="pw"]').val()
+            };
+            let {data} = await axios.post('/login',param);
+            console.log(data);
+            if(data.success == true){
+                alert('로그인에 성공 했습니다.');
+                sessionStorage.setItem("id",param.id)
+                sessionStorage.setItem("token",data.token);
+                location.href = '/view/list.html';
+            }else{
+                alert('아이디 또는 비밀번호를 확인 하세요');
+            }
+
+        }
+
+        function regist(){
+            location.href='./regist.html';
+        }
+
+    </script>
+</html>

@@ -6,6 +6,7 @@ from fastapi.responses import RedirectResponse
 from fastapi.staticfiles import StaticFiles
 from sqlalchemy import text
 
+from bcrypt_utils import encode_pass, matches
 from db import get_conn
 
 
@@ -22,7 +23,44 @@ logger = logging.getLogger(__name__)
 
 @app.get("/")
 def main():
-    return RedirectResponse("/view/index.html")
+    return RedirectResponse("/view/login.html")
+
+@app.post("/login")
+def login(info:Dict[str,str]):
+    json = {'success':False, 'token':''}
+    logger.info(f'info={info}')
+    # 1. 입력받은 id 를 통해 pw 가져옴
+    conn = get_conn()
+    sql = text("SELECT pw FROM member WHERE id = :id")
+
+    try:
+        # 2. 입력받은 pw 와 가져온 pw 를 비교
+        result = conn.execute(sql,{"id":info['id']}).mappings().fetchone()
+        success = matches(info['pw'],result['pw'])
+        # 3. True 일 경우 로그인 성공으로 가정
+        json.update({'success':success,'token':''})
+        pass
+    except Exception as e:
+        logger.error(e)
+    finally:
+        conn.close()
+
+
+    # 이 사람이 회원이라는 것을 어떻게 증명?
+    # conn = get_conn()
+    # info['pw'] = encode_pass(info['pw'])
+    # sql = text("""SELECT pw FROM member WHERE id = :id """)
+    # try:
+    #     result = conn.execute(sql,info)
+    #     res = matches(info['pw'],result)
+    #     print(res)
+    #     pass
+    # except Exception as e:
+    #         logger.error(e)
+    # finally:
+    #         conn.close()
+    # 아이디 비밀번호가 모두 일치 하면 True, 아니면 False
+    return json
 
 @app.get("/overlay")
 def overlay(id:str):
@@ -50,6 +88,10 @@ def join(info:Dict[str,Any]): # POST 방식은 파라메터를 Dict 또는 class
     # DB 접속
     conn = get_conn()
     row = 0
+
+    # pw 를 암호화 하여 넣어줘야 한다.
+    info['pw'] = encode_pass(info['pw'])
+
     # 쿼리문 준비
     sql = text("""INSERT INTO member(id,pw,name,age,gender,email)
                 VALUES(:id,:pw,:name,:age,:gender,:email)""")
