@@ -29,6 +29,7 @@ def main():
 def login(info:Dict[str,str]):
     json = {'success':False, 'token':''}
     logger.info(f'info={info}')
+    # 이 사람이 회원이라는 것을 어떻게 증명?
     # 1. 입력받은 id 를 통해 pw 가져옴
     conn = get_conn()
     sql = text("SELECT pw FROM member WHERE id = :id")
@@ -36,6 +37,7 @@ def login(info:Dict[str,str]):
     try:
         # 2. 입력받은 pw 와 가져온 pw 를 비교
         result = conn.execute(sql,{"id":info['id']}).mappings().fetchone()
+        # 아이디 비밀번호가 모두 일치 하면 True, 아니면 False
         success = matches(info['pw'],result['pw'])
         # 3. True 일 경우 로그인 성공으로 가정
         json.update({'success':success,'token':''})
@@ -46,20 +48,6 @@ def login(info:Dict[str,str]):
         conn.close()
 
 
-    # 이 사람이 회원이라는 것을 어떻게 증명?
-    # conn = get_conn()
-    # info['pw'] = encode_pass(info['pw'])
-    # sql = text("""SELECT pw FROM member WHERE id = :id """)
-    # try:
-    #     result = conn.execute(sql,info)
-    #     res = matches(info['pw'],result)
-    #     print(res)
-    #     pass
-    # except Exception as e:
-    #         logger.error(e)
-    # finally:
-    #         conn.close()
-    # 아이디 비밀번호가 모두 일치 하면 True, 아니면 False
     return json
 
 @app.get("/overlay")
