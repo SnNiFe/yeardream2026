@@ -37,3 +37,8 @@ coll.update(
 # doc1 에 대해서 변경되었는지 확인
 results = coll.get(ids=["doc1"])
 print(f'ids 를 활용해 데이터 가져오기 : {results}')
+
+# 4. 데이터 삭제
+coll.delete(ids=["doc3"])
+data_list = coll.get()
+print(data_list)
