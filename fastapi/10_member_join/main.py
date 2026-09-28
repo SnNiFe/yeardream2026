@@ -49,7 +49,7 @@ def join(info:Dict[str,Any]): # POST 방식은 파라메터를 Dict 또는 class
     logger.info(f'info={info}')
     # DB 접속
     conn = get_conn()
-
+    row = 0
     # 쿼리문 준비
     sql = text("""INSERT INTO member(id,pw,name,age,gender,email)
                 VALUES(:id,:pw,:name,:age,:gender,:email)""")
@@ -58,11 +58,10 @@ def join(info:Dict[str,Any]): # POST 방식은 파라메터를 Dict 또는 class
         result = conn.execute(sql,info) # 실행
         # 결과확인(쿼리 실행 결과를 담은 객체)
         logger.info(f"result={result.rowcount}")
+        row = result.rowcount
         pass
     except Exception as e:
         logger.error(e)
     finally:
         conn.close() # DB 접속 종료
-
-    
-    return None
+    return {'row':row}
