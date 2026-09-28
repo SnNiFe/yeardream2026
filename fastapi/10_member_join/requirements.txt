@@ -2,3 +2,7 @@ uvicorn
 fastapi
 pymysql
 sqlalchemy
+
+# 암호화
+bcrypt
+pyjwt
