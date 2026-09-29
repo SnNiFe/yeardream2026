@@ -96,7 +96,7 @@ def search_data(query:str) -> None:
 
     # llm 에 전달할 프롬프트 작성
     prompt = f"""
-    당신은 코딩 분석 전문가 입니다. 제공된 [강의자료]를 바탕으로 사용자의 [질문]에 답하세요.
+    당신은 코딩, 분석 전문가 입니다. 제공된 [강의자료]를 바탕으로 사용자의 [질문]에 답하세요.
     없는 말을 지어내지말고, 자료와 다른 답변을 해선 안됩니다.
     최대한 간결하게 사용자의 질문과 관련 된 답변만 해주세요.
     예시는 너무 길지 않게 최대 1개만 적어주세요.
@@ -126,6 +126,6 @@ def search_data(query:str) -> None:
             print('\n')
             print(f"중지이유 : {chunk.get('done_reason')}")
 
-question = input('질문을 해 주세요\n')
+question = input('(pandas, fastapi, scikit-learn 관련) 질문을 해주세요\n')
 search_data(question)
 
