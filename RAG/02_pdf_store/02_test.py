@@ -8,10 +8,10 @@
 import os
 import chromadb
 import tiktoken
+import ollama
 from PyPDF2 import PdfReader
 from chromadb.utils import embedding_functions
 from langchain_text_splitters import RecursiveCharacterTextSplitter
-import ollama
 
 ollama_ef = embedding_functions.OllamaEmbeddingFunction(
     url="http://localhost:11434",
@@ -75,7 +75,7 @@ def insert_data(path:str) -> None:
         batch_chunks = chunks[i : i + batch_size]
         batch_ids = ids[i : i + batch_size]
         batch_metas = metadatas[i : i + batch_size]
-        # 0개씩 끊어서 Ollama에 전달
+        # n개씩 끊어서 Ollama에 전달
         coll.upsert(documents=chunks,ids=ids,metadatas=metadatas)
         print(f"진행 중: {min(i + batch_size, len(chunks))} / {len(chunks)} 완료")
     print(f'{file_name} 저장 완료, {len(chunks)}개 문맥 확보')
@@ -107,7 +107,7 @@ def search_data(query:str) -> None:
     [질문]
     {query}    
     """
-    print('llm model loading..')
+
     resp = ollama.generate(
         model='gemma4:e2b',
         prompt=prompt,
@@ -118,6 +118,7 @@ def search_data(query:str) -> None:
             "temperature": 0.2     # 강의자료 기반이므로 창의성 낮추고 정확도 유지
         }
     )
+    print('답변 생성 중...(서피스 환경에서 1~2분 소요)')
     for chunk in resp:
         print(chunk['response'],end="", flush=True)
 
