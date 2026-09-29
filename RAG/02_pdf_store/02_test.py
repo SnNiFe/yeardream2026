@@ -118,7 +118,6 @@ def search_data(query:str) -> None:
             "temperature": 0.2     # 강의자료 기반이므로 창의성 낮추고 정확도 유지
         }
     )
-    print('chunks creating..')
     for chunk in resp:
         print(chunk['response'],end="", flush=True)
 
