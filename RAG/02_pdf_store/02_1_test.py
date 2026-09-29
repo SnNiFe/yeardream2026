@@ -22,9 +22,9 @@ coll = client.get_or_create_collection(
 
 # 4. 데이터 저장
 def insert_data(path:str) -> None:
-    lecture = path.split('/')[1].rsplit('.',1)[0].loewr()
-    print(lecture)
-    """
+    lecture = path.split('/')[1].rsplit('.',1)[0].lower()
+    # print(lecture)
+    
     # 4-1. 특정 PDF 를 불러와 읽는다.
     reader = PdfReader(path)
     text = ''
@@ -35,13 +35,14 @@ def insert_data(path:str) -> None:
 
     # 9페이지짜리 문자를 통으로 넣을 수 없기에 잘라줘야한다.(chunking 작업)
     text_spliter = RecursiveCharacterTextSplitter(
-        chunk_size=800, # 최대 청크 크기
-        chunk_overlap=50, # 청크간 전후 문맥 파악을 위해 겹쳐지는 수
+        chunk_size=400, # 최대 청크 크기
+        chunk_overlap=25, # 청크간 전후 문맥 파악을 위해 겹쳐지는 수
         length_function=len, # 토큰의 길이를 뭘로 정해?
     )
     # 데이터 끊어주기
     chunks = text_spliter.split_text(text)
-    # print(f'chinks = {chunks}')
+    print(f'{lecture} chunks = {len(chunks)}')
+    """
     # chromadb 에 입력
     ids = [f"idx_{i}" for i in range(len(chunks))]
     coll.upsert(documents=chunks,ids=ids)
@@ -50,8 +51,8 @@ def insert_data(path:str) -> None:
     """
 
 insert_data('data/pandas.pdf')
-insert_data('data/FASTAPI.pdf')
 insert_data('data/scikit_learn.pdf')
+insert_data('data/FASTAPI.pdf')
 
 def search_data(query:str) -> None:
     print(f'질문내용 : {query}')
