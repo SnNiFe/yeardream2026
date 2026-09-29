@@ -1,5 +1,6 @@
 # 1. 임베딩 함수 지정(chromadb 의 기본 임베딩을 사용하지 않을 경우)
 import chromadb
+import ollama
 import tiktoken
 from PyPDF2 import PdfReader
 from chromadb.utils import embedding_functions
@@ -85,6 +86,10 @@ def search_data(query:str) -> None:
     [질문]
     {query}
     """
+
+    resp = ollama.generate(model="gemma4:e2b", prompt=prompt, stream=True)
+    for chunk in resp:
+        print(chunk['response'],end="",flush=True)
 
 question = input('소설 운수 좋은 날에 대한 질문을 해주세요\n')
 # 이 소설의 주인공은 누구야?
