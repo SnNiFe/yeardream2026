@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <style>
+        table,th, td{
+            border: 1px solid black;
+            border-collapse: collapse;
+            padding: 5px 10px;
+        }
+
+        ul{
+            list-style-type: none;
+        }
+        ul li{
+            border: 1px solid lightgray;
+            padding: 10px;
+            margin-top: 5px;
+            margin-left: -40px;
+            width: 320px;
+        }
+
+        a{
+            text-decoration: none;
+            float: right;
+            font-weight: 600;
+            color: red;
+        }
+    </style>
+</head>
+<body>
+    <h3>등록하고 싶은 과목의 이름과 PDF 를 등록 하세요</h3>
+    <table>
+        <tr>
+            <th>과목명</th>
+            <td><input type="text" id="subject"/></td>
+        </tr>
+        <tr>
+            <th>파일</th>
+            <td><input type="file" id="files"/></td>
+        </tr>
+        <tr>
+            <th colspan="2">
+                <button onclick="regist()">등록</button>
+                <button onclick="location.href='./chat.html'">질문 하기로 이동</button>
+            </th>
+        </tr>
+    </table>
+    <h3>등록된 subject</h3>
+    <ul id="subject_list"></ul>
+    <div class="overlay" id="overlay"></div>
+</body>
+<script>
+    make_subject_list();
+
+    function make_subject_list(){
+        let content = ''
+        getList().forEach(function(item,idx){
+            content += `<li>${item} <a href="#" onclick="del_item(${idx})">삭제</a></li>`
+        });
+        $('#subject_list').html(content);
+    }
+
+    function del_item(idx){
+        let list = getList();
+        list.splice(idx,1);
+        localStorage.setItem('subjects',JSON.stringify(list));
+        make_subject_list();
+    }
+
+    function getList(){
+        let list = localStorage.getItem('subjects') == null ?
+            [] : JSON.parse(localStorage.getItem('subjects'));
+        return list;
+    }
+
+
+    async function regist(){
+        const formData = new FormData();
+   		let subject = $('#subject').val();
+        let list = getList();
+        list.push(subject);
+        console.log(list);
+        localStorage.setItem('subjects',JSON.stringify(list));
+        let files = $('#files')
+        formData.append('subject',subject);
+        console.log(files[0].files)
+		for (let f of files[0].files){
+			formData.append('files',f);
+		}
+
+        const {data} = await axios.post('/upload',formData);
+        console.log(data);
+        alert(data.upload+' 파일이 RAG에 등록 되었습니다.')
+        make_subject_list();
+    }
+</script>
+</html>
