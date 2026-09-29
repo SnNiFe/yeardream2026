@@ -42,23 +42,32 @@ def insert_data(path:str) -> None:
     # 데이터 끊어주기
     chunks = text_spliter.split_text(text)
     print(f'{lecture} chunks = {len(chunks)}')
-    """
+    
     # chromadb 에 입력
     ids = [f"idx_{i}" for i in range(len(chunks))]
-    coll.upsert(documents=chunks,ids=ids)
+    metas = [{"subject":lecture} for i in range(len(chunks))]
+
+    batch_size = 5 # 배치 사이즈 만큼 잘라서 저장
+    for i in range(0, len(chunks), batch_size):
+        batch_chunks = chunks[i : i + batch_size]
+        batch_ids = ids[i : i + batch_size]
+        batch_metas = metas[i : i + batch_size]
+        coll.upsert(documents=batch_chunks, ids=batch_ids, metadatas=batch_metas)
+        print(f"진행 중: {min(i + batch_size, len(chunks))} / {len(chunks)} 완료")
+
     print(f'저장 완료 {len(chunks)}개 문맥 확보')
-    print(coll.get())
-    """
+    print(coll.get(where={'subject':lecture}))
 
-insert_data('data/pandas.pdf')
-insert_data('data/scikit_learn.pdf')
-insert_data('data/FASTAPI.pdf')
+# insert_data('data/pandas.pdf')
+# insert_data('data/scikit_learn.pdf')
+# insert_data('data/FASTAPI.pdf')
 
-def search_data(query:str) -> None:
-    print(f'질문내용 : {query}')
+def search_data(subject:str, query:str) -> None:
+    print(f'과목 : {subject} / 질문내용 : {query}')
     results = coll.query(
         query_texts=[query],
         n_results=5,
+        where={'subject':{'$eq':subject}}
     )
     # print(results) # chroma db 에서 가져온 내용
     # 가져온 리스트 안의 내용을 줄바꿈 두번으로 붙여서 하나의 텍스트로 만든다.
@@ -66,10 +75,10 @@ def search_data(query:str) -> None:
 
     # llm 에 전달할 프롬프트 작성
     prompt = f"""
-    당신은 소설 분석 전문가 입니다. 제공된 [소설 본문 발췌]를 바탕으로 사용자의 [질문]에 답하세요.
-    본문에 근거하여 인물의 심리, 사건의 배경, 복선 등을 상세히 분석해 주세요.
+    당신은 python 을 이용한 머신러닝 선생님 입니다. 제공된 [학습교재]를 바탕으로 사용자의 [질문]에 답하세요.
+    [학습교제] 내용에 근거하여 질문한 기술의 개요, 특징 등에 대해서 알기쉽게 설명해 주세요.
     
-    [소설 본문 발췌]
+    [학습교제]
     {context}
 
     [질문]
@@ -92,7 +101,6 @@ def search_data(query:str) -> None:
             print("\n")
             print(f"중지이유 : {chunk.get('done_reason')}")
 
-# question = input('소설 운수 좋은 날에 대한 질문을 해주세요\n')
-# # 이 소설의 주인공은 누구야?
-# # 이 소설의 줄거리에 대해서 요약해줘
-# search_data(question)
+subject = input('물어보고 싶은 과목(fastapi, scikit-learn, pands)\n')
+q = input('질문내용\n')
+search_data(subject,q)
