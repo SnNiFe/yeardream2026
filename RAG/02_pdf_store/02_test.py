@@ -85,7 +85,7 @@ def insert_data(path:str) -> None:
 # insert_data('data/scikit_learn.pdf')
 
 def search_data(query:str) -> None:
-    print(f'질문내용 : {query}')
+    # print(f'질문내용 : {query}')
     results = coll.query(
         query_texts=[query],
         n_results=3, # 청크 개수 제한
@@ -107,7 +107,7 @@ def search_data(query:str) -> None:
     [질문]
     {query}    
     """
-
+    print('llm model loading..')
     resp = ollama.generate(
         model='gemma4:e2b',
         prompt=prompt,
@@ -118,6 +118,7 @@ def search_data(query:str) -> None:
             "temperature": 0.2     # 강의자료 기반이므로 창의성 낮추고 정확도 유지
         }
     )
+    print('chunks creating..')
     for chunk in resp:
         print(chunk['response'],end="", flush=True)
 
