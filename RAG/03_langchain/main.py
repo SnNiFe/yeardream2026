@@ -44,7 +44,7 @@ def add_data(dir:str) -> None:
 
 # add_data('data')
 # print(store.get())
-q = input('pandas, scikit-learn, fast-api 들에 대해서 궁금한 점을 물어 보세요.')
+q = input('pandas, scikit-learn, fast-api 들에 대해서 궁금한 점을 물어 보세요. ')
 
 # 4. OLLAMA 와 LANG-CHAIN 연동한 LLM 사용
 llm = ChatOllama(model="gemma4:e2b", tmeperature=0.5)
@@ -69,4 +69,7 @@ ret = store.as_retriever(search_kwargs={"k":5})
 # 그 내용을 prompt 에 전달
 # prompt 내용을 llm 에 전달
 # 결과 내용을 StrOutputParser() 에게 전달하여 문자열만 추출
-chain = ({'question':RunnablePassthrough(q), 'context':ret}|prompt|llm|StrOutputParser())
+chain = ({'question':RunnablePassthrough(), 'context':ret}|prompt|llm|StrOutputParser())
+
+for chunk in chain.stream(q):
+    print(chunk,end="",flush=True)
