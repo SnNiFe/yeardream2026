@@ -1,6 +1,7 @@
 import logging
+from typing import List
 
-from fastapi import FastAPI
+from fastapi import FastAPI, File, Form, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import RedirectResponse
 from fastapi.staticfiles import StaticFiles
@@ -21,3 +22,10 @@ logger = logging.getLogger(__name__) # main.py 즉 현재 모듈 네임
 def main():
     logger.info("main page 접근 완료")
     return RedirectResponse("/view/index.html")
+
+# file 과 문자열 파라메터가 섞여서 들어올 때 처리 방법
+@app.post("/upload")
+def upload(subject:str = Form(...), files:List[UploadFile] = File([])):
+    logger.info(f"subject: {subject}")
+    logger.info(f"files : {files}")
+    return {'upload':''}
