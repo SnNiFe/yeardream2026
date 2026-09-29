@@ -87,9 +87,21 @@ def search_data(query:str) -> None:
     {query}
     """
 
-    resp = ollama.generate(model="gemma4:e2b", prompt=prompt, stream=True)
+    resp = ollama.generate(
+        model="gemma4:e2b", 
+        prompt=prompt, 
+        stream=True, 
+        options={
+            "num_predict":-1,   # 출력토큰 수(무제한)
+            "num_ctx":8192      # 입력+출력 합친 컨텍스트 크기
+        }
+    )
     for chunk in resp:
         print(chunk['response'],end="",flush=True)
+
+        if chunk.get('done'):
+            print("\n")
+            print(f"중지이유 : {chunk.get('done_reason')}")
 
 question = input('소설 운수 좋은 날에 대한 질문을 해주세요\n')
 # 이 소설의 주인공은 누구야?
