@@ -76,7 +76,7 @@ def insert_data(path:str) -> None:
         batch_ids = ids[i : i + batch_size]
         batch_metas = metadatas[i : i + batch_size]
         # n개씩 끊어서 Ollama에 전달
-        coll.upsert(documents=chunks,ids=ids,metadatas=metadatas)
+        coll.upsert(documents=batch_chunks,ids=batch_ids,metadatas=batch_metas)
         print(f"진행 중: {min(i + batch_size, len(chunks))} / {len(chunks)} 완료")
     print(f'{file_name} 저장 완료, {len(chunks)}개 문맥 확보')
 
