@@ -1,3 +1,6 @@
+import contextlib
+import io
+
 from langchain_core.output_parsers import StrOutputParser
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.runnables import RunnablePassthrough
@@ -80,9 +83,30 @@ print(max_velocity_data)
 # print(max_velocity_data_idxmax)
 """
 
-### 7. 추출한 코드 실행
+### 7. 추출한 코드 실행 -> 거기서 출력된 내용을 output 에 담아 밖으로 내보냄
 def run_code(input_code:str):
-
-    exec(input_code,{'df_inkjet':df_inkjet})
+    # 코드를 실행했을때 print 된 내용을 보고싶다.
+    output = io.StringIO() # 문자열이 오갈수 있는 객체
+    try:
+        # 무언가 출력이 나오면 output 으로 보내서 저장해라
+        # 아래 코드가 실행되는 동안만(with 로 인해 다 끝나면 자동으로 자원은 닫힌다.)
+        with contextlib.redirect_stdout(output):
+            # exec(code, 필요한변수)
+            exec(input_code,{'df_inkjet':df_inkjet})
+            # result = df_inkjet.loc[df_inkjet['Velocity'].idxmax()]
+    except Exception as e:
+        print(f'Error : {e}',file=output)
     
-    return ""
+    return output.getvalue()
+
+# 코드 실행 결과 보기
+code_exec_chain = code_extract_chain|run_code
+print(code_exec_chain.invoke("Velocity가 가장 큰 데이터를 찾고 싶어"))
+
+""" # 출력 결과 #
+Viscosity          8
+Velocity           9
+PrintingSpeed    250
+PatternSize       14
+Name: 125, dtype: int64
+"""
