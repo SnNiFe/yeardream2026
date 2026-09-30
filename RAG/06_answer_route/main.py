@@ -37,6 +37,6 @@ wf.add_edge('vector_db',END)
 
 # compile 및 실행
 app = wf.compile()
-query = input('readme.md 질문 내용중 하나를 입력하세요.')
+query = input('readme.md 질문 내용중 하나를 입력하세요. ')
 result = app.invoke({'question':query})
 print(result)
