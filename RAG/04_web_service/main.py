@@ -1,13 +1,14 @@
 import logging
-from typing import List
+from typing import Dict, List
 
 from fastapi import FastAPI, File, Form, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import RedirectResponse
+from fastapi.responses import RedirectResponse, StreamingResponse
 from fastapi.staticfiles import StaticFiles
 
 from service.file_service import file_upload
-from service.rag_service import add_data
+from service.llm_service import get_answer
+from service.rag_service import add_data, search_obj
 
 app = FastAPI()
 
@@ -44,3 +45,13 @@ def upload(subject:str = Form(...), files:List[UploadFile] = File([])):
             add_data(subject, file.filename)
 
     return {'upload':file_list}
+
+@app.post('/ask/chat')
+def ask_chat(info:Dict[str,str]):
+    logger.info(f'info : {info}')
+    q = info['q']
+    subject = info['subject']
+    # chromadb 검색기 불러오기
+    ret = search_obj(subject)
+    # 검색기와 질문을 랭체인으로 조립해서 결과 받아오기
+    return StreamingResponse(get_answer(q,ret),media_type='text/plain')

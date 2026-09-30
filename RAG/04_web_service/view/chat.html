@@ -46,7 +46,7 @@
     </style>
 </head>
 <body>
-    <h1>Exaone 과의 채팅</h1>
+    <h1>LLM 과의 채팅</h1>
     <div id="chat-box"></div>
 
     <div id="input-group">
@@ -72,7 +72,7 @@
         chatBox.innerHTML = "생성 중...";
         fullResponse = "";
         // 브라우저 Axios는 fetch의 ReadableStream을 활용해야 실시간 처리가 가능합니다.
-
+        inputBox.disabled = true;
         const {data} = await axios({
             method: 'post',
             url:'/ask/chat',
@@ -97,7 +97,7 @@
             chatBox.innerHTML = md.render(fullResponse);
             chatBox.scrollTop = chatBox.scrollHeight;
         }
-
+        inputBox.disabled = false;
         inputBox.value = "";
     }
 
