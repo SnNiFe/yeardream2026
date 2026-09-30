@@ -4,6 +4,15 @@ from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.runnables import RunnablePassthrough
 from langchain_ollama import ChatOllama
 
+# from langchain_google_genai import ChatGoogleGenerativeAI
+
+# # 발급받은 키를 직접 넣거나 환경변수로 등록
+# model = ChatGoogleGenerativeAI(
+#     model="gemini-1.5-flash-latest",
+#     google_api_key="",
+#     temperature=0.2
+# )
+
 # 모델 생성
 model = ChatOllama(base_url='http://localhost:11434', model="gemma4:e2b", temperature=0.2)
 
