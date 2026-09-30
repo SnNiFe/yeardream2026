@@ -32,17 +32,30 @@ msg_list = [ # 메시지리스트 안의 개별메시지는 Tuple 형태여야 �
 ]
 prompt = ChatPromptTemplate.from_messages(msg_list)
 code_gen_chain = {"question":RunnablePassthrough()}|prompt|llm|StrOutputParser()
-# result = code_gen_chain.invoke("Velocity가 가장 큰 데이터를 찾고 싶어")
-# print(result)
+result = code_gen_chain.invoke("Velocity가 가장 큰 데이터를 찾고 싶어")
+print(result)
 
 # 출력 결과 붙여넣기 #
+"""
 # Velocity가 가장 큰 데이터를 찾기 위해 'Velocity' 컬럼을 기준으로 최대값을 찾습니다.
-
 # 1. 'Velocity' 컬럼의 최댓값을 가진 행의 인덱스를 찾습니다.
 max_velocity_index = df_inkjet['Velocity'].idxmax()
-
 # 2. 해당 인덱스를 사용하여 전체 데이터프레임에서 해당 행을 선택합니다.
 max_velocity_data = df_inkjet.loc[max_velocity_index]
-
 # 결과 출력
 print(max_velocity_data)
+"""
+
+### 5. 대답에서 코드만 추출
+def python_code_parser(text:str):
+    # 대답중에서 ```python 으로 감싸진 부분만 받아오는 함수
+    # ```python -> ``` -> [```,code내용,```]
+    code_list = text.replace("```python","```").strip().split("```")
+
+    # ``` 이 없어서 끊지 못한 경우 코드를 그대로 내보낸다.
+    if len(code_list) == 1:
+        return code_list[0]
+    return code_list[1]
+
+print('###'*30)
+print(python_code_parser(result))
