@@ -7,6 +7,7 @@ from fastapi.responses import RedirectResponse
 from fastapi.staticfiles import StaticFiles
 
 from service.file_service import file_upload
+from service.rag_service import add_data
 
 app = FastAPI()
 
@@ -40,5 +41,6 @@ def upload(subject:str = Form(...), files:List[UploadFile] = File([])):
             # 어떤 파일이 업로드 되었는지 리스트 만들기
             file_list.append(file.filename)
             # 업로드 된 파일의 내용을 chromadb 에 저장
+            add_data(subject, file.filename)
 
     return {'upload':file_list}
