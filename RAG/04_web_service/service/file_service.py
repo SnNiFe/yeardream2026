@@ -1,4 +1,5 @@
 import os
+import shutil
 
 from fastapi import UploadFile
 
@@ -10,4 +11,13 @@ if not os.path.exists(FILE_PATH):
 
 def file_upload(file:UploadFile) -> bool:
     success = False
+
+    path = f'{FILE_PATH}/{file.filename}'
+    try:
+        with open(path,'wb') as file_obj:
+            shutil.copyfileobj(file.file,file_obj)
+            success = True
+    except Exception as e:
+        print(e)
+        os.remove(path)
     return success
