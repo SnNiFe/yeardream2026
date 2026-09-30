@@ -1,3 +1,6 @@
+from langchain_core.output_parsers import StrOutputParser
+from langchain_core.prompts import ChatPromptTemplate
+from langchain_core.runnables import RunnablePassthrough
 import pandas as pd
 
 from langchain_ollama import ChatOllama
@@ -7,8 +10,8 @@ llm = ChatOllama(model="gemma4:e2b")
 
 ### 2. 데이터 불러오기
 data_path = 'data/InkjetDB_preprocessing.csv'
-df = pd.read_csv(data_path,index_col=0)
-columns = ",".join(df.columns)
+df_inkjet = pd.read_csv(data_path,index_col=0)
+columns = ",".join(df_inkjet.columns)
 # print(columns)
 
 ### 3. 데이터 분석 프롬프트 작성
@@ -19,4 +22,27 @@ system_prompt = f"""
     컬럼들 : {columns}
     데이터는 이미 로드되어 있으므로 데이터 로드 코드는 생략하세요.
 """
-print(system_prompt)
+# print(system_prompt)
+
+### 4. 프롬프트 조립 후 실행
+# 'human', 'user', 'ai', 'assistant', 'system'
+msg_list = [ # 메시지리스트 안의 개별메시지는 Tuple 형태여야 한다.
+    ("system",system_prompt), # AIMessage(content=system_prompt)
+    ("human","{question}")    # HumanMessage(content="{question}")
+]
+prompt = ChatPromptTemplate.from_messages(msg_list)
+code_gen_chain = {"question":RunnablePassthrough()}|prompt|llm|StrOutputParser()
+# result = code_gen_chain.invoke("Velocity가 가장 큰 데이터를 찾고 싶어")
+# print(result)
+
+# 출력 결과 붙여넣기 #
+# Velocity가 가장 큰 데이터를 찾기 위해 'Velocity' 컬럼을 기준으로 최대값을 찾습니다.
+
+# 1. 'Velocity' 컬럼의 최댓값을 가진 행의 인덱스를 찾습니다.
+max_velocity_index = df_inkjet['Velocity'].idxmax()
+
+# 2. 해당 인덱스를 사용하여 전체 데이터프레임에서 해당 행을 선택합니다.
+max_velocity_data = df_inkjet.loc[max_velocity_index]
+
+# 결과 출력
+print(max_velocity_data)
