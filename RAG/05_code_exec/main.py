@@ -32,11 +32,10 @@ msg_list = [ # 메시지리스트 안의 개별메시지는 Tuple 형태여야 �
 ]
 prompt = ChatPromptTemplate.from_messages(msg_list)
 code_gen_chain = {"question":RunnablePassthrough()}|prompt|llm|StrOutputParser()
-result = code_gen_chain.invoke("Velocity가 가장 큰 데이터를 찾고 싶어")
-print(result)
+# result = code_gen_chain.invoke("Velocity가 가장 큰 데이터를 찾고 싶어")
+# print(result)
 
-# 출력 결과 붙여넣기 #
-"""
+""" # 출력 결과 #
 # Velocity가 가장 큰 데이터를 찾기 위해 'Velocity' 컬럼을 기준으로 최대값을 찾습니다.
 # 1. 'Velocity' 컬럼의 최댓값을 가진 행의 인덱스를 찾습니다.
 max_velocity_index = df_inkjet['Velocity'].idxmax()
@@ -57,5 +56,33 @@ def python_code_parser(text:str):
         return code_list[0]
     return code_list[1]
 
-print('###'*30)
-print(python_code_parser(result))
+# print('###'*30)
+# print(python_code_parser(result))
+
+""" # 출력 결과 #
+# Velocity가 가장 큰 데이터를 찾기 위해 'Velocity' 컬럼을 기준으로 최대값을 찾습니다.
+max_velocity_data = df_inkjet.loc[df_inkjet['Velocity'].idxmax()]
+print(max_velocity_data)
+"""
+
+### 6. chain 으로 코드 추출 조합
+code_extract_chain = code_gen_chain|python_code_parser
+# print(code_extract_chain.invoke("Velocity가 가장 큰 데이터를 찾고 싶어"))
+
+""" # 출력 결과 #
+# Velocity가 가장 큰 데이터를 찾기 위해 DataFrame에서 Velocity 컬럼을 기준으로 정렬하고 첫 번째 행을 선택합니다.
+# 방법 1: sort_values를 사용하여 내림차순 정렬 후 첫 번째 행 선택 (가장 직관적)
+max_velocity_data = df_inkjet.sort_values(by='Velocity', ascending=False).iloc[0]
+print(max_velocity_data)
+# 또는 방법 2: idxmax를 사용하여 최대값을 가진 행의 인덱스를 찾은 후 해당 행을 선택 (더 효율적)
+# max_index = df_inkjet['Velocity'].idxmax()
+# max_velocity_data_idxmax = df_inkjet.loc[max_index]
+# print(max_velocity_data_idxmax)
+"""
+
+### 7. 추출한 코드 실행
+def run_code(input_code:str):
+
+    exec(input_code,{'df_inkjet':df_inkjet})
+    
+    return ""
