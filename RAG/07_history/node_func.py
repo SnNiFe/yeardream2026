@@ -68,6 +68,7 @@ def plain_answer(state:State):
         # [1,2,3].extend([4,5,6]) -> [1,2,3,4,5,6]
         msg_list.extend(context)
     msg_list.append(HumanMessage(content=question))
+    print(msg_list)
     prompt = ChatPromptTemplate.from_messages(msg_list)
     chain = prompt|llm|StrOutputParser()
     answer = chain.invoke({})
@@ -111,16 +112,15 @@ def excel_answer(state:State):
     """
     msg_list = [] # append 대신 [(),()] 식으로 직접 넣어도 됨
     msg_list.append(('system',sys_prompt))
-    msg_list.append(('human','질문:{question}\n데이터:{context}'))
-
-    chain = ChatPromptTemplate.from_messages(msg_list)|llm|StrOutputParser()
-    answer = chain.invoke({'question':question,'context':data})
-    state['generation'] = answer
+    msg_list.append(('human',f'질문:{question}\n데이터:{data}'))
     ### context ###
     context = state.get('context',[])
-    context.append(HumanMessage(question))
-    context.append(AIMessage(content=answer))
-    state['context'] = context
+    if len(context) > 0:
+        msg_list.extend(context)
+    print(msg_list)
+    chain = ChatPromptTemplate.from_messages(msg_list)|llm|StrOutputParser()
+    answer = chain.invoke({})
+    state['generation'] = answer
 
     return state
 
@@ -134,11 +134,16 @@ def vector_db(state:State):
     print(f'참고자료 : {data}')
     msg_list = []
     msg_list.append(("system","사용자의 질문을 제공하는 정보를 바탕으로 대답하세요."))
-    msg_list.append(("human","질문:{question}\n정보:{context}"))
+    msg_list.append(("human",f"질문:{question}\n정보:{data}"))
+    context = state.get('context',[])
+    if len(context) > 0:
+        msg_list.extend(context)
+    print(msg_list)
+
     prompt = ChatPromptTemplate.from_messages(msg_list)
 
     chain = prompt|llm|StrOutputParser()
-    answer = chain.invoke({'context':data,'question':question})
+    answer = chain.invoke({})
 
     return {'question':question, 'generation':answer, 'data':data}
 
