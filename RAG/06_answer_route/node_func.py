@@ -44,7 +44,7 @@ def init_answer(state:State):
     msg_list = []
     msg_list.append(('system',sys_prompt))
     msg_list.append(('human','{question}'))
-    route_prompt = ChatPromptTemplate(msg_list)
+    route_prompt = ChatPromptTemplate.from_messages(msg_list)
     chain = route_prompt|route_llm|JsonOutputParser()
     result = chain.invoke({'question':question})
     print(f'route result : {result}') # {'route': 'vector'}
