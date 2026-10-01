@@ -19,6 +19,7 @@ def get_state():
 
 # 최초 질문을 받아서 plain, excel, vector 중 하나를 받는다.
 route_llm = ChatOllama(model="gemma4:e2b", format='json')
+llm = ChatOllama(model="gemma4:e2b")
 
 def init_answer(state:State):
     question = state['question']
@@ -53,7 +54,10 @@ def router(state:State):
 
 def plain_answer(state:State):
     print('학습한 내용 안에서 답변')
-    return {'question':'', 'generation':''}
+    question = state['question']
+    answer = llm.invoke(question)
+    print(answer)
+    return {'question':question, 'generation':answer.content}
 
 def excel_data(state:State):
     print('excel 에서 데이터 참고 후 답변')
@@ -61,5 +65,6 @@ def excel_data(state:State):
 
 def vector_db(state:State):
     print('RAG 에서 데이터 참고 후 답변')
+    question = state['question']
     return {'question':'', 'generation':''}
 
