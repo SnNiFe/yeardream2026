@@ -1,0 +1,17 @@
+# langchain
+langchain-core
+langchain-ollama
+
+# chromadb
+chromadb
+langchain-chroma
+langchain-text-splitters
+
+# langgraph
+langgraph
+
+# pandas
+pandas
+
+# pdf
+PyPDF2
