@@ -1,5 +1,6 @@
 from typing import Any, List, TypedDict
 
+from langchain_core.messages import AIMessage, HumanMessage
 from langchain_core.output_parsers import JsonOutputParser, StrOutputParser
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.runnables import RunnablePassthrough
@@ -44,7 +45,8 @@ def init_answer(state:State):
     msg_list = []
     msg_list.append(('system',sys_prompt))
     msg_list.append(('human','{question}'))
-    route_prompt = ChatPromptTemplate(msg_list)
+    
+    route_prompt = ChatPromptTemplate.from_messages(msg_list)
     chain = route_prompt|route_llm|JsonOutputParser()
     result = chain.invoke({'question':question})
     print(f'route result : {result}') # {'route': 'vector'}
@@ -59,9 +61,18 @@ def router(state:State):
 def plain_answer(state:State):
     print('학습한 내용 안에서 답변')
     question = state['question']
-    answer = llm.invoke(question)
-    print(answer)
-    return {'question':question, 'generation':answer.content}
+    msg_list = []
+    context = state.get('context',[])
+    if len(context) > 0:
+        # [1,2,3].append([4,5,6]) -> [1,2,3,[4,5,6]]
+        # [1,2,3].extend([4,5,6]) -> [1,2,3,4,5,6]
+        msg_list.extend(context)
+    msg_list.append(HumanMessage(content='{question}'))
+    prompt = ChatPromptTemplate.from_messages(msg_list)
+    chain = prompt|llm|StrOutputParser()
+    answer = chain.invoke({'question':question})
+    # print(answer)
+    return {'question':question, 'generation':answer}
 
 def excel_data(state:State):
     print('excel 에서 데이터 참고 후 답변')
@@ -92,7 +103,7 @@ def excel_data(state:State):
 def excel_answer(state:State):
 
     question = state['question']
-    context = state['data']
+    data = state['data']
 
     sys_prompt ="""
     당신은 데이터를 바탕으로 질문에 답하는 데이터 분석가 입니다.
@@ -103,8 +114,14 @@ def excel_answer(state:State):
     msg_list.append(('human','질문:{question}\n데이터:{context}'))
 
     chain = ChatPromptTemplate.from_messages(msg_list)|llm|StrOutputParser()
-    answer = chain.invoke({'question':question,'context':context})
+    answer = chain.invoke({'question':question,'context':data})
     state['generation'] = answer
+    ### context ###
+    context = state.get('context',[])
+    context.append(HumanMessage(question))
+    context.append(AIMessage(content=answer))
+    state['context'] = context
+
     return state
 
 def vector_db(state:State):
@@ -125,3 +142,12 @@ def vector_db(state:State):
 
     return {'question':question, 'generation':answer, 'data':data}
 
+# 최종적으로 답변 전달하고 context 에 대화내용 저장하는 노드
+def end_point_answer(state:State):
+
+    context = state.get('context',[])
+    context.append(HumanMessage(content=state['question']))
+    context.append(AIMessage(content=state['generation']))
+    state['context'] = context
+    print(f"대화 히스토리 개수 : {len(state['context'])}")
+    return state
