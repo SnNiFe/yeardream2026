@@ -7,7 +7,7 @@ from langchain_ollama import ChatOllama
 from langgraph.graph import StateGraph
 
 from store_func import coll, load_excel_data
-from utils import retrieve_to_text
+from utils import python_code_parser, retrieve_to_text, run_code
 
 
 # State 객체
@@ -79,13 +79,33 @@ def excel_data(state:State):
     msg_list.append(('system',sys_prompt))
     msg_list.append(('human','{question}'))
     prompt = ChatPromptTemplate.from_messages(msg_list)
-    chain = prompt|llm|StrOutputParser()
-    result = chain.invoke({'question':question})
-    print(result)
-    
+
+    chain = prompt|llm|StrOutputParser()|python_code_parser
+    code = chain.invoke({'question':question})
+    print(code)
+    data = run_code('excel_df',df,code)
+
     #{'question':RunnablePassthrough()}
 
-    return {'question':'', 'generation':''}
+    return {'question':question, 'generation':code, 'code':code, 'data':data}
+
+def excel_answer(state:State):
+
+    question = state['question']
+    context = state['data']
+
+    sys_prompt ="""
+    당신은 데이터를 바탕으로 질문에 답하는 데이터 분석가 입니다.
+    사용자가 입력한 질문을 제공된 데이터를 바탕으로 질문에 답하세요.
+    """
+    msg_list = [] # append 대신 [(),()] 식으로 직접 넣어도 됨
+    msg_list.append(('system',sys_prompt))
+    msg_list.append(('human','질문:{question}\n데이터:{context}'))
+
+    chain = ChatPromptTemplate.from_messages(msg_list)|llm|StrOutputParser()
+    answer = chain.invoke({'question':question,'context':context})
+    state['generation'] = answer
+    return state
 
 def vector_db(state:State):
     print('RAG 에서 데이터 참고 후 답변')
