@@ -67,10 +67,10 @@ def plain_answer(state:State):
         # [1,2,3].append([4,5,6]) -> [1,2,3,[4,5,6]]
         # [1,2,3].extend([4,5,6]) -> [1,2,3,4,5,6]
         msg_list.extend(context)
-    msg_list.append(HumanMessage(content='{question}'))
+    msg_list.append(HumanMessage(content=question))
     prompt = ChatPromptTemplate.from_messages(msg_list)
     chain = prompt|llm|StrOutputParser()
-    answer = chain.invoke({'question':question})
+    answer = chain.invoke({})
     # print(answer)
     return {'question':question, 'generation':answer}
 
