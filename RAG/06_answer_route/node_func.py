@@ -2,9 +2,11 @@ from typing import Any, List, TypedDict
 
 from langchain_core.output_parsers import JsonOutputParser, StrOutputParser
 from langchain_core.prompts import ChatPromptTemplate
+from langchain_core.runnables import RunnablePassthrough
 from langchain_ollama import ChatOllama
 from langgraph.graph import StateGraph
-from store_func import coll
+
+from store_func import coll, load_excel_data
 from utils import retrieve_to_text
 
 
@@ -63,6 +65,26 @@ def plain_answer(state:State):
 
 def excel_data(state:State):
     print('excel 에서 데이터 참고 후 답변')
+    question = state['question']
+    df = load_excel_data()
+    sys_prompt = f"""
+    당신은 주어진 데이터를 분석하는 데이터 분석가 입니다.
+    주어진 DataFrame 으로 질문에 답할 수 있는 정보를 출력하는 파이썬 코드를 작성하세요.
+    DataFrame 이름은 excel_df 이며, 다음과 같은 컬럼들이 있습니다.
+    컬럼들 : {df.columns}
+    데이터는 이미 로드되어 있으므로 데이터 로드 코드는 생략하세요.
+    """
+
+    msg_list = []
+    msg_list.append(('system',sys_prompt))
+    msg_list.append(('human','{question}'))
+    prompt = ChatPromptTemplate.from_messages(msg_list)
+    chain = prompt|llm|StrOutputParser()
+    result = chain.invoke({'question':question})
+    print(result)
+    
+    #{'question':RunnablePassthrough()}
+
     return {'question':'', 'generation':''}
 
 def vector_db(state:State):

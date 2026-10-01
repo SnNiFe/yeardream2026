@@ -26,7 +26,7 @@ wf.add_conditional_edges(
     {
         'plain':'plain_answer',
         'excel':'excel_data',
-        'vecotr':'vector_db'
+        'vector':'vector_db'
     }
 )
 
