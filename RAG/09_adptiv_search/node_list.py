@@ -1,15 +1,21 @@
 
+import os
 from typing import TypedDict
 
+from dotenv import load_dotenv
 from langchain_core.output_parsers import JsonOutputParser, StrOutputParser
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_ollama import ChatOllama
+from langchain_tavily import TavilySearch
 from langgraph.graph import StateGraph
 
 from rag import rag_search
 
-route_llm = ChatOllama(mode="gemma4:e2b",format='json')
-llm = ChatOllama(mode="gemma4:e2b", num_ctx=1024)
+route_llm = ChatOllama(model="gemma4:e2b",format='json')
+llm = ChatOllama(model="gemma4:e2b", num_ctx=2048)
+
+load_dotenv()
+os.environ["TAVILY_API_KEY"] = os.getenv("TAVILY_API_KEY")
 
 class State(TypedDict):
     question:str        # 질문 내용
@@ -41,7 +47,7 @@ def router(state:State):
     - 반드시 아래 [출력형식예시] 로 출력할 것
 
     [출력형식예시]
-    {{"route":"rag}}
+    {{"route":"rag"}}
     """
 
     human_prompt = "[참고데이터]\n{context}\n\n[질문]\n{question}"
@@ -60,6 +66,13 @@ def plain(state:State):
     return state
 
 def web_search(state:State):
+    print('웹검색 시작')
+    search = TavilySearch(max_results=5, search_depth='basic', topic='general')
+    results = search.invoke({'query':state['question']})
+    text = ''
+    for result in results['results']:
+        text += f"{result['title']}\n{result['content']}\n\n"
+    state['data'] = text
     return state
 
 def last_answer(state:State):
@@ -70,7 +83,7 @@ def last_answer(state:State):
     [참고데이터]가 없거나 부족하면 당신이 알고있는 지식을 활용해서 답변하세요.
     모르는 내용이면 모른다고 답변하세요.
     """
-    human_prompt = "[참고데이터]\n{context}\n\n[질문]\n{quedtion}"
+    human_prompt = "[참고데이터]\n{context}\n\n[질문]\n{question}"
     msg_list = [('system',sys_prompt),('human',human_prompt)]
     prompt = ChatPromptTemplate.from_messages(msg_list)
     chain = prompt|llm|StrOutputParser()

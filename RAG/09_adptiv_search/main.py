@@ -40,5 +40,5 @@ query = input('질문 내용을 입력 하세요\n')
 # result = app.invoke({'question':query})
 # print(result)
 
-for chunk in app.stream({'question':query}, stream_mode='messages'):
+for chunk in app.stream({'question':query}, stream_mode="messages"):
     print(chunk[0].content, end='', flush=True)
