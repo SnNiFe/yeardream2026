@@ -1,13 +1,15 @@
 
 from typing import TypedDict
 
-from langchain_core.output_parsers import JsonOutputParser
+from langchain_core.output_parsers import JsonOutputParser, StrOutputParser
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_ollama import ChatOllama
 from langgraph.graph import StateGraph
 
+from rag import rag_search
+
 route_llm = ChatOllama(mode="gemma4:e2b",format='json')
-llm = ChatOllama(mode="gemma4:e2b")
+llm = ChatOllama(mode="gemma4:e2b", num_ctx=1024)
 
 class State(TypedDict):
     question:str        # 질문 내용
@@ -20,10 +22,12 @@ def get_state():
 def init_answer(state:State):
     q = state['question']
     print(f"최초질문 : {q}")
+    state['data'] = rag_search(q)
     return state
 
 def router(state:State):
     print('router 에게 내용 점검')
+    print(state['data'])
     sys_prompt ="""
     당신은 [참고데이터]와 [질문]을 분석하여 올바른 답변 경로(Route)를 판단하는 라우팅 전문가 입니다.
 
@@ -51,11 +55,24 @@ def router(state:State):
     return result['route']
 
 def plain(state:State):
+    print('data 가 쓸모없다는 뜻이니 비워버린다.')
+    state['data'] = ''
     return state
 
 def web_search(state:State):
     return state
 
 def last_answer(state:State):
-    print('최종답변')
+    print('최종답변 준비')
+    sys_prompt ="""
+    당신은 [참고데이터] 를 바탕으로 질문에 답하는 전문가 입니다.
+    사용자가 입력한 [질문]에 대해서 [참고데이터]를 바탕으로 답해주세요.
+    [참고데이터]가 없거나 부족하면 당신이 알고있는 지식을 활용해서 답변하세요.
+    모르는 내용이면 모른다고 답변하세요.
+    """
+    human_prompt = "[참고데이터]\n{context}\n\n[질문]\n{quedtion}"
+    msg_list = [('system',sys_prompt),('human',human_prompt)]
+    prompt = ChatPromptTemplate.from_messages(msg_list)
+    chain = prompt|llm|StrOutputParser()
+    state['generation'] = chain.invoke({'context':state['data'], 'question':state['question']})
     return state

@@ -37,7 +37,7 @@ def insert_data():
         store.add_documents(docs)
         print(f"{file} 저장 완료 ({len(docs)})개")
 
-insert_data() # 아직 실행 안함 (1회 실행 후 주석 처리 예정)
+## insert_data() # 아직 실행 안함 (1회 실행 후 주석 처리 예정)
 
 def rag_search(query:str):
     # similarity : 유사도순
