@@ -1,3 +1,5 @@
+import uuid
+
 from langgraph.checkpoint.memory import MemorySaver
 from langgraph.graph import END
 from node_func import end_point_answer, get_state, init_answer, plain_answer, router, search, vector_db, web_answer
@@ -38,3 +40,22 @@ wf.add_edge('vector_db','end_point')
 wf.add_edge('search','web_answer')
 wf.add_edge('web_answer','end_point')
 wf.add_edge('end_point',END)
+
+# MemorySaver 를 통해 compile 시 checkpoint 지정
+memory = MemorySaver()
+app = wf.compile(checkpointer=memory)
+config = {'configurable':{'thread_id': str(uuid.uuid4())}}
+
+while True:
+    query = input('질문을 입력하세요.(종료는 exit)\n')
+    if query == 'exit':
+        break
+    else:
+        result = app.invoke({'question':query},config)
+        print(result['generation'])
+
+# 저장상황 확인
+print('대화 종료, 저장상황 확인')
+history = app.get_state(config)
+for ctx in history.values['context']:
+    print(ctx)

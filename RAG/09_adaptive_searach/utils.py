@@ -1,6 +1,7 @@
 from datetime import datetime
 import contextlib
 import io
+import os
 
 
 def retrieve_to_text(docs):
@@ -37,13 +38,19 @@ def run_code(df_name,df,input_code:str):
     return output.getvalue()
 
 
-def save_chat_log(state, file_path: str = "chat_log.txt"):
-    """대화 로그를 txt 파일에 누적 기록합니다."""
+def save_chat_log(state, length, file_path: str = "chat_log.txt"):
+    # 대화 로그를 txt 파일에 누적 기록합니다.
     timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-    
+    question = state['question']
+    answer = state['generation']
+    dir = 'logs'
+    # logs 폴더가 없으면 자동 생성
+    os.makedirs(dir, exist_ok=True)
+    # file_path = f'{dir}/{file_path}'
+    file_path = os.path.join(dir, file_path)
     log_entry = f"""
-    ==================================================
-    [일시: {timestamp}] [경로: {route}]
+    ========================================================
+    [문답: {length}] [일시: {timestamp}] [경로: {file_path}]
     - 질문: {question}
     - 답변:
     {answer}
