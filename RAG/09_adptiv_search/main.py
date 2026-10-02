@@ -24,9 +24,9 @@ wf.add_conditional_edges(
     'init_answer',
     router,
     {
-        'rag','last_answer', # router 반환값: 가야할노드명
-        'plain','plain',
-        'web','web'
+        'rag':'last_answer', # router 반환값: 가야할노드명
+        'plain':'plain',
+        'web':'web'
     }
 )
 
