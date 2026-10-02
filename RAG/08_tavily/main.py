@@ -8,7 +8,7 @@ tavily search API - AI 에이젼트 및 LLM 을 위해 최적화된 AI 전용 �
 import os
 
 from dotenv import load_dotenv
-from langchain_tavily import TavilySearch
+from langchain_tavily import TavilyExtract, TavilySearch
 
 load_dotenv() # .env 불러오기
 
@@ -30,4 +30,22 @@ def basic_search(query:str):
         print(f"URL : {r['url']}")
         print(f"SUMMARY : {r['content'][:450]}...")
 
-basic_search('2026년 langchain 최신버전 주요 변경사항')
+# basic_search('2026년 langchain 최신버전 주요 변경사항')
+
+def detail_content(query:str):
+    search = TavilySearch(max_results=1, search_depth='basic', topic='general')
+    result = search.invoke({'query':query})
+    ### extract_depth
+    # basic     : 표준적인 본문 텍스트 추출
+    # advance   : 표,구조,동적요소 등 정밀한 추출
+    extract = TavilyExtract(extract_depth='basic')
+    i = 0 # 혹시 몰라서 임의로 정함
+    for r in result['results']:
+        print(f"TITLE : {r['title']}")
+        url = r['url']
+        print(f"URL : {url}")
+        content = extract.invoke({'urls':[url]})
+        print(content['results'][i].keys())
+        print(content['results'][i]['raw_content'])
+        i += 1 # 혹시 몰라서 임의로 정함
+detail_content('tavily 활용법')
