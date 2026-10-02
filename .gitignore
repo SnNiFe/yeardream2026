@@ -8,8 +8,8 @@
 **/my_db/
 **/store/
 **/upload/
+**/.env
 .env
-.gitignore
 .env*
 env*
 env.py
