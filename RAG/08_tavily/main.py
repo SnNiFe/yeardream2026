@@ -32,6 +32,7 @@ def basic_search(query:str):
 
 # basic_search('2026년 langchain 최신버전 주요 변경사항')
 
+
 def detail_content(query:str):
     search = TavilySearch(max_results=1, search_depth='basic', topic='general')
     result = search.invoke({'query':query})
@@ -48,4 +49,30 @@ def detail_content(query:str):
         print(content['results'][i].keys())
         print(content['results'][i]['raw_content'])
         i += 1 # 혹시 몰라서 임의로 정함
-detail_content('tavily 활용법')
+# detail_content('tavily 활용법')
+
+
+def advance_search(query:str):
+    # include_answer = "advanced"       : Tavily 에서 검색결과로 만든 요약답변 포함
+    # include_raw_content = "markdown"  : 페이지 본문 전체 포함(markdown)
+    # time_range = "year"               : 기간(day,month,year)
+    # exclude_domains = ["youtube.com"] : 특정 도메인 제회(include_domains=[]를 이용해 필수포함)
+    search = TavilySearch(
+        max_results=3,
+        topic="general",
+        search_depth="advanced",
+        include_answer="advanced",
+        include_raw_content="markdown",
+        time_range="year",
+        exclude_domains=["youtube.com"]
+    )
+    result = search.invoke({'query':query})
+    for r in result['results']:
+        print(f"keys : {r.keys()}")
+        print(f"TITLE : {r['title']}")
+        print(f"CONTENT : {r['content']}")
+        print('==='*120)
+        print(f"RAW : {r['raw_content']}")
+        break
+
+advance_search('RAG 시스템에서 검색 품질을 높이는 최신 기법')
