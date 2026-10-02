@@ -1,3 +1,6 @@
 langchain-core
 langchain-ollama
 langchain-tavily
+
+# .env 인식 라이브러리
+python-dotenv
