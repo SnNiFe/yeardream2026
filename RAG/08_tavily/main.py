@@ -28,6 +28,6 @@ def basic_search(query:str):
     for r in result['results']:
         print(f"TITLE : {r['title']}")
         print(f"URL : {r['url']}")
-        print(f"SUMMARY : {r['content'][:250]}...")
+        print(f"SUMMARY : {r['content'][:450]}...")
 
 basic_search('2026년 langchain 최신버전 주요 변경사항')
