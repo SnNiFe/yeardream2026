@@ -1,0 +1,20 @@
+# langchain
+langchain-ollama
+langchain-community
+langchain-core
+
+# hugging-face
+langchain-huggingface
+
+# chromadb
+chromadb
+langchain-chroma
+
+# text-splitter
+langchain-text-splitters
+
+# rank bm25
+rank-bm25
+
+# 문장 유사도 검색
+sentence-transformers
