@@ -1,0 +1,16 @@
+# llama-index
+llama-index-core
+llama-index-llms-ollama
+llama-index-embeddings-ollama
+
+# read file : 이걸 안하면 한글이 깨진다.
+llama-index-readers-file
+
+# chromadb
+chromadb
+llama-index-vector-stores-chroma
+
+# ollama
+ollama
+
+# uv pip install -r requirements.txt
