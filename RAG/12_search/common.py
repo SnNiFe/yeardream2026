@@ -43,7 +43,7 @@ def get_hf_embeddings(model_name:str):
 
 
 def get_llm(temperature:float=0.2) -> ChatOllama:
-    return ChatOllama(model="gemma4:latest", temperature=temperature)
+    return ChatOllama(model="gemma4:e2b", temperature=temperature)
 
 
 def rank_of(target_id: str, docs):
