@@ -30,15 +30,14 @@ def query_engine(question:str):
 # question = input("운수 좋은날에 대한 질문을 해주세요.\n")
 # query_engine(question)
 
+engine = index.as_chat_engine(
+    chat_mode="condense_plus_context",
+    similarity_top_k=5,
+    system_prompt="당신은 소설 분석 전문가 입니다. 제공된 [소설 본문 발췌]를 근거로 사용자의 [질문]에 대답해 주세요.",
+    context_prompt=PromptTemplate("[소설 본문 발췌]\n{context_str}\n\n[질문]\n{query_str}")
+)
+
 def chat_engine(question):
-
-    prompt = PromptTemplate("[소설 본문 발췌]\n{context_str}\n\n[질문]\n{query_str}")
-
-    engine = index.as_chat_engine(
-        similarity_top_k=5,
-        system_prompt="당신은 소설 분석 전문가 입니다. 제공된 [소설 본문 발췌]를 근거로 사용자의 [질문]에 대답해 주세요.",
-        context_prompt=prompt
-    )
     # resp = engine.chat(question) # 실시간 X
     resp = engine.stream_chat(question)
     for chunk in resp.response_gen:
@@ -50,3 +49,4 @@ while True:
         break
     else:
         chat_engine(question)
+        print("")
