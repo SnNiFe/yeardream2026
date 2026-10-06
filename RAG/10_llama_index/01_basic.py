@@ -20,8 +20,16 @@ print(f"읽어온 chunk : {len(documents)}")
 index = VectorStoreIndex.from_documents(documents,show_progress=True)
 nodes = list(index.docstore.docs.values())
 print(f"총 생성된 청크 수 : {len(nodes)}")
+for i,node in enumerate(nodes):
+    # print(f"{i}:{node}")
+    # print(node.metadata)
+    page = node.metadata.get('page_label','?')
+    text = node.text[:50]
+    id = node.node_id
+    print(f"[NODE {i+1}] {id}")
+    print(f"{page} page")
+    print(f"{text}...")
+
 # 3-5. 저장(생략)
-
-# 4. 질문에 대한 내용 찾아오기(retrieve 모드로 변환)
-
-# 5. 해당 내용 찾아서 LLM 에 전달
+# 4. 질문에 대한 내용 찾아오기(retrieve 모드로 변환)(생략)
+# 5. 해당 내용 찾아서 LLM 에 전달(생략)
