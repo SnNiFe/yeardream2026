@@ -2,6 +2,8 @@ import os
 from typing import TypedDict
 
 from dotenv import load_dotenv
+from langchain_core.output_parsers import StrOutputParser
+from langchain_core.prompts import ChatPromptTemplate
 from langchain_ollama import ChatOllama
 from langgraph.graph import StateGraph
 
@@ -42,4 +44,18 @@ def web(state:State):
 
 def last_answer(state:State):
     print('주어진 데이터를 가지고 최종 응답 완성')
+    sys_prompt = """
+    당신은 주어진 [참고데이터]를 바탕으로 질문에 답하는 분석 답변 전문가 입니다.
+    사용자가 입력한 [질문]에 대해서 [참고데이터]를 바탕으로 질문에 대답하세요.
+    [참고데이터]가 없거나 부족하면 당신이 이미 알고있는 지식을 활용하여 답변하세요.
+    """
+    human_prompt = "[참고데이터]\n{context}\n\n[질문]\n{question}"
+    msg_list = [("system",sys_prompt),("human",human_prompt)]
+    prompt = ChatPromptTemplate.from_messages(msg_list)
+    chain = prompt|llm|StrOutputParser()
+    result = chain.invoke({
+        "question":state['question'],
+        "context":state['data']
+    })
+    state['generation'] = result
     return state
