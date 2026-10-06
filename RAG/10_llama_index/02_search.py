@@ -29,3 +29,11 @@ for i,node_with_score in enumerate(nodes):
 query_engine = index.as_query_engine(similarity_top_k=5)
 resp = query_engine.query("이 소설의 주제는?")
 print(resp)
+
+# AI 가 어떤 부분을 보고 답했는지 확인
+for i,node in enumerate(resp.source_nodes,1):
+    page = node.metadata.get("page_label","?")
+    preview = node.text[:80].replace("\n","")
+    print(f"[{i}] {page}쪽 유사도 : {node.score:.4f}")
+    print(f"{preview}...")
+    print("-"*120)
