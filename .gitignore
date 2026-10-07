@@ -16,3 +16,4 @@ env.py
 key.py
 key*
 **/logs/
+./vscode
