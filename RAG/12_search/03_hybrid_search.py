@@ -41,7 +41,9 @@ for s in SCENARIOS:
     tgt = s['target']
     v_rank = rank_of(tgt, vec.invoke(q))
     bm_rank = rank_of(tgt,bm25.invoke(q))
-    hy_rank = rank_of(tgt, (rrf_fuse([vec.invoke(q),bm25.invoke(q)],top_n=10)))
+    # hy_rank = rank_of(tgt, (rrf_fuse([vec.invoke(q),bm25.invoke(q)],top_n=10)))
+    fused = rrf_fuse([vec.invoke(q),bm25.invoke(q)], top_n=10)
+    hy_rank = rank_of(tgt, fused)
     print(f"질문 : {q}")
     print(f"정답 : {tgt} | 예상 : {s['expect']}")
     print(f"VECTOR : {v_rank}")
