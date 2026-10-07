@@ -94,7 +94,9 @@ def rrf_fuse(result_list, k: int = 60, top_n: int = 5):
             key = doc.page_content
             docmap[key] = doc
             # [핵심] RRF 점수 계산 공식: 1 / (k + rank)
-            # 기존 점수에 현재 순위 기반 점수를 누적합(+=)
+            # 기존 점수에 현재 순위 기반 점수를 누적합(+=) -> A 에도 있고, B 에도 있으면 더 중요
+            # A 에서 5점, B 에서 4점 -> 9점
+            # A 에서 4점, B 에서 0점 -> 4점
             scores[key] = scores.get(key, 0) + 1 / (k + i + 1)
 
     # 내림차순 정렬하여 점수가 가장 '높은' 문서가 상위에 오게 함
