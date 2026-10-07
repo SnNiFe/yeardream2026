@@ -41,3 +41,9 @@ def show(model_name,k):
 # 동일 모델 다른 k 값:
 show(EMB_KO,k=1)
 show(EMB_KO,3)
+# k=1 이면서 다른 모델
+print("다국어 지원 모델")
+show(EMB_KO,1)
+# 거리가 1에 가까워진다. 그리고 정답률도 낮아진다.
+print("한국어 미지원 모델")
+show(EMB_EN,1)
