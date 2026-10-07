@@ -33,3 +33,7 @@ for size,overlap in test_size:
     # 컬렉션 삭제
     store.delete_collection()
     print()
+"""
+    정답 크기는 데이터마다 다르기 때문에 반드시 실험으로 정해야 한다.
+    현재의 과정이 청킹의 테스트 일부라고 생각하면 된다.
+"""
