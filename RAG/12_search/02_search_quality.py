@@ -31,9 +31,10 @@ def show(model_name,k):
     store = index(model_name)
     print(f"임베딩 모델 : {model_name.split('/')[-1]} / top_k={k}")
     for q in questions:
+        print(f"* 질문 : {q}")
         hits = store.similarity_search_with_score(q,k)
         for data,score in hits:
-            print(f"* 답변 : {data.metadata['topic']}({score:.2f})")
+            print(f"    -> 답변 : {data.metadata['topic']}({score:.2f})")
     
     store.delete_collection()
 
