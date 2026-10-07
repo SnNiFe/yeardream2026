@@ -82,6 +82,7 @@ def build_bm25(chunks, k: int = 5):
 
 
 # ── 융합(RRF) ─────────────────────────────────────────────
+# k : RRF 에서 순위간 점수격차가 커지는 것을 막는 상수값(기본 60)
 def rrf_fuse(result_list, k: int = 60, top_n: int = 5):
     # 각 문서별 최종 RRF 점수를 저장할 딕셔너리 {문서 내용: RRF 점수}
     scores = {}
