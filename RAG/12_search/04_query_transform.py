@@ -30,3 +30,11 @@ for v in variants:
 fused = rrf_fuse(result_list,top_n=5)
 mq_rank = rank_of(target,fused)
 print(f"VEC 순위:{v_rank} -> MQ 순위:{mq_rank} (topic : {topics(fused)})")
+
+# HyDE(Hypothetical Document Embeddgings, 가상 답변 검색)
+# 질문을 LLM 에 던져 답변을 받고 그 내용으로 RAG 검색을 수행한다.
+answer = hyde(llm,q)
+print(f"가상답변 : {answer}")
+# answer 를 기반으로 vector 검색 수행
+hyde_rank=rank_of(target,vec.invoke(answer))
+print(f"VEC 순위:{v_rank} | MQ 순위:{mq_rank} | HyDE 순위:{hyde_rank}") 
