@@ -18,3 +18,5 @@ key*
 **/logs/
 **/.vscode/
 yolo26n.pt
+**/data/
+**/fashion_mnist/
