@@ -20,7 +20,7 @@ while True:
         source=frame,
         persist=True, # 이전 프레임을 기억
         conf=0.5,
-        imgsz=[640,480], #[480,640], # 해상도 조정(속도 향상)
+        imgsz=320, #[480,640], # 해상도 조정(속도 향상)
         classes=[0], # 0번:사람만 인식하도록 설정
         show=False, # 자체 팝업으로 보여주기
         verbose=False
