@@ -30,7 +30,9 @@ while True:
         boxes = r.boxes
         if boxes.id != None:
             print("사람이 감지 되었습니다.")
-            print(f"탐지정보 : \n{boxes.xywh}\n{boxes.xyxy}\n")
+            xywh_l = [f"{val:.2f}" for val in boxes.xywh.tolist()[0]]
+            xyxy_l = [f"{val:.2f}" for val in boxes.xyxy.tolist()[0]]
+            print(f"탐지정보 : \n xywh:{xywh_l}\n xyxy:{xyxy_l}\n")
         
 
     # YOLO 가 탐지한 내용을 가져와서 그리기
