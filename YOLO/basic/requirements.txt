@@ -11,5 +11,5 @@ ultralytics
 matplotlib
 # drawing
 opencv-python
-# 처리율
+# for 문의 처리율 표시
 tqdm
