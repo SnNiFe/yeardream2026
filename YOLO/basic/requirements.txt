@@ -11,3 +11,5 @@ ultralytics
 matplotlib
 # drawing
 opencv-python
+# 처리율
+tqdm
