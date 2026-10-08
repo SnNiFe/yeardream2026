@@ -17,6 +17,6 @@ key.py
 key*
 **/logs/
 **/.vscode/
-yolo26n.pt
+yolo26n**
 **/data/
 **/fashion_mnist/
