@@ -7,7 +7,7 @@ import cv2
 from ultralytics import YOLO
 
 # 1. 카메라 연결
-cap = cv2.VideoCapture(1)
+cap = cv2.VideoCapture(1) # 0: back cam, 1: front cam
 # 2. 모델 준비
 model = YOLO('yolo26n.pt')
 
@@ -49,7 +49,7 @@ while True:
     resize_frame = cv2.resize(plot_frame,(640,480))
     cv2.imshow("monitoring...",resize_frame)
     
-    if cv2.waitKey(1000) & 0xFF == ord("q"): # n/1000초 마다 q가 눌렸는지 확인
+    if cv2.waitKey(1) & 0xFF == ord("q"): # n/1000초 마다 q가 눌렸는지 확인
         break
     
 
