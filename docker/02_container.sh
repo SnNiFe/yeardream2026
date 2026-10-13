@@ -12,3 +12,14 @@ docker run --name mariadb -d -p 3306:3306 --restart=always -e MYSQL_ROOT_PASSWOR
 # 컨테이너 실행 여부
 # -a : 죽어있거나 살아있거나 모두 보여줌(이 옵션이 없으면 살아있는것만 보여줌)
 docker ps -a
+
+# 컨테이너 정지
+# docker stop [컨테이너이름 또는 아이디]
+docker stop mariadb
+# docker start mariadb
+# docker restart mariadb
+
+# 컨테이너 삭제 - 이때 컨테이너 내의 모든 데이터가 소실된다.
+# -f : 강제적으로 지운다.(무조건 지운다.)
+# docker container rm -f [컨테이너이름]
+docker container rm -f mariadb
