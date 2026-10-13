@@ -62,3 +62,5 @@ uvicorn main:app --host 0.0.0.0 --workers 1
 # 이 IP를 통해서 컨테이너간 통신을 해야한다.(172.17.0.1 ~ ...)
 # model 을 불러오는 호출부에 ip 내용을 추가
 # model = ChatOllama(base_url="172.17.0.1:11434", model="gemma4:e4b")
+
+# D:\shared_study\lang_chain\03_chat 를 컨테이너에 띄우기
