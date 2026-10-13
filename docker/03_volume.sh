@@ -33,5 +33,5 @@ DESC member;
 
 # 데이터 추가
 INSERT INTO member(id,pw,name,age,gender,email)
-	VALUES('admin','pass','관리자',33,'남','admin@eamil.com');
+	VALUES('admin','pass','관리자',33,'남','admin@email.com');
 SELECT * FROM member;
