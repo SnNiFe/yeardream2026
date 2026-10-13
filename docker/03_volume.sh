@@ -35,3 +35,7 @@ DESC member;
 INSERT INTO member(id,pw,name,age,gender,email)
 	VALUES('admin','pass','관리자',33,'남','admin@email.com');
 SELECT * FROM member;
+
+# 컨테이너 정지 -> 삭제 -> 실행
+docker stop mariadb
+docker container rm -f mariadb
