@@ -39,7 +39,7 @@ docker exec -it ollama /bin/bash
 # 우리는 python:3.14-slim 이미지를 받은적이 없다.
 # 없는 이미지를 이용해 컨테이너를 생성하려고하면 자동으로 이미지를 다운로드 받는다.
 # -it 터미널로 연결하는 옵션
-docker run -d -it --name fastapi -p 80:8000 -v $HOME/docker_share/fastapi/app:/app python:3.14-slim
+docker run -d -it --name fastapi -p 80:8000 -v C:\fastapi\app:/app python:3.14-slim
 
 # 실패한 컨테이너는 실패상태로 남아있게 된다. 그래서 다시 만들때 삭제해야 한다.
 docker container rm -f fastapi
