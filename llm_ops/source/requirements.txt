@@ -1,0 +1,16 @@
+# uv pip install -r requirements.txt
+# .env
+python-dotenv
+
+# langchain
+langchain
+langchain-ollama
+
+# llama-index
+llama-index
+llama-index-llms-ollama
+llama-index-embeddings-ollama
+
+# opik
+opik
+llama-index-callbacks-opik
