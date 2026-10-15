@@ -12,8 +12,8 @@ tracer = OpikTracer(project_name=PROJECT_NAME,tags=['langchain','ollama'])
 llm = ChatOllama(model=LLM_MODEL, base_url=OLLAMA_URL, temperature=0)
 
 # 3. 프롬프트 입력
-prompt = ChatPromptTemplate.format_messages([
-    ("sysyem","너는 대학교 학사 안내 전문가야. 모르는 내용은 모른다고 답해"),
+prompt = ChatPromptTemplate.from_messages([
+    ("system","너는 대학교 학사 안내 전문가야. 모르는 내용은 모른다고 답해"),
     ("human","{question}")
 ])
 
@@ -33,3 +33,4 @@ for q in questions:
 
 # 4. 모든 기록 서버에 전송
 tracer.flush()
+print(f"전송 완료 Opik > Projects > {PROJECT_NAME} 에서 Traces 를 확인하세요")
