@@ -6,6 +6,7 @@ from llama_index.llms.ollama import Ollama
 from llama_index.embeddings.ollama import OllamaEmbedding
 from opik.integrations.llama_index import LlamaIndexCallbackHandler
 import opik
+from llama_index.core.callbacks import CallbackManager
 
 load_dotenv('.env')
 
@@ -27,7 +28,7 @@ opik.configure(
 # llama-index 는 검색+대답 형태이기 때문에 다른 형태로 opik callbacks 를 등록한다.
 def use_llama_index():
     # 1) opik callback 을 등록(llama-index 의 실행들이 자동으로 기록)
-    Settings.callback_manager([
+    Settings.callback_manager = CallbackManager([
         LlamaIndexCallbackHandler(
             project_name=PROJECT_NAME, 
             skip_index_construction_trace=True # 문서 인덱싱 과정 생략여부, 질문만 기록
