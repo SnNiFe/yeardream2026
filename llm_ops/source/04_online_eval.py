@@ -32,3 +32,19 @@ def answer_with_scoring(question:str):
         print(f"[채점완료] 환각 = {h.value:.2f} / 연관성 = {r.value:.2f}")
 
     return {"answer":answer, "context":context}
+
+if __name__ == '__main__':
+    questions = [
+        "수강 신청은 어디서 하나요?",
+        "평점 4.2면 몇 학점까지 신청이 되나요?",
+        "기숙사 신청기간 알려줘", # 문서에 없는 내용
+        "오늘 점심메뉴 추천해줘", # 학사와 무관한 내용
+    ]
+
+    for q in questions:
+        print(f"Q : {q}")
+        result = answer_with_scoring(q)
+        print(f"A : {result['answer']}\n")
+
+    opik.flush_tracker()
+    print(f"완료! Traces 목록에서 hal_online / rel_online 점수를 확인 하세요.")
