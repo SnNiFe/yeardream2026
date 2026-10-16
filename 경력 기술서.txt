@@ -1,0 +1,58 @@
+1. DBPIA 리뉴얼 프로젝트
+- 개발기간 : 2018.10 ~ 2019.04
+- C# -≫ java 재개발 작업
+- 로그인 프록시(대학/도서관/SNS) 서비스 개발
+- 논문 구매 모듈 개발
+- 논문 상세 서비스(보기/신고/북마크) 개발
+- 검색엔진 연동
+- 외부 학회 모듈 개발
+개발 환경
+back-end: spring, 전자정부 프레임워크
+front-end : html, java script, j-query
+DB: ms-sql 프로시저
+서버: window server
+기타: SVN
+
+2. 이너인포 그룹웨어
+- 개발기간 : 2019.07 ~ 2019.09
+- 인사관리 시스템 개발
+- 권한 관리 기능 개발
+개발 환경
+back-end: spring, 전자정부 프레임워크
+front-end : html, java script, j-query
+DB: maria db
+서버: linux
+기타: SVN
+
+3. 사내 신규 서비스 개발
+- 개발기간 : 2019.12 ~ 2020.03
+- 프로젝트 설계 및 프로젝트 설정
+- 기본 기능 개발
+- 배치 프로그램 개발
+개발 환경
+back-end: nose.js (express)
+front-end : ejs, java script, j-query
+DB: mongo db, mysql
+서버: linux
+기타: GIT, WEB-RTC
+
+4. 중소기업 연구원 유지보수
+- 운영 기간 : 2019.07 ~ 2020.03
+- 중소기업 연구원 정책연구 DB 홈페이지 유지보수
+- 중소기업 연구원 대표 홈페이지 유지보수
+운영 환경
+back-end: java(spring)
+front-end : jsp, j-query
+DB: Oracle, mariaDB
+서버: Window
+기타: SVN
+
+5. 한국 지역정보 개발원 유지보수
+- 운영 기간 : 2019.07 ~ 2020.03
+- 한국 지역정보 개발원 홈페이지 유지보수
+운영 환경
+back-end: PHP
+front-end : html, j-query
+DB: Mysql
+서버: linux
+기타: SVN
