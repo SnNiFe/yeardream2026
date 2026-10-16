@@ -15,6 +15,7 @@ LLM_MODEL = 'gemma4:e4b'
 EMBED_MODEL = 'bge-m3:latest'
 OLLAMA_URL = 'http://localhost:11434'
 PROJECT_NAME = os.getenv('OPIK_PROJECT_NAME')
+JUDGE_MODEL = f"ollama_chat/{LLM_MODEL}"
 print(f"project : {PROJECT_NAME}")
 
 # OPIK 환경설정
