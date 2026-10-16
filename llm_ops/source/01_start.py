@@ -20,7 +20,7 @@ prompt = ChatPromptTemplate.from_messages([
 chain = prompt|llm
 
 questions = [
-    "수강신천은 어디서 하나요?",
+    "수강신청은 어디서 하나요?",
     "졸업하려면 몇 학점이 필요한가요?",
     "오늘 학생식당 메뉴는 뭐예요?"
 ]
